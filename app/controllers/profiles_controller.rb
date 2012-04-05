@@ -150,7 +150,7 @@ class ProfilesController < InheritedResources::Base
   def show
     Google_analytics.new.pageImpression("Profile", "MyProfile")
 
-    if params[:login].present? # when someone comes in with http://www.blinkup.com/username
+    if params[:login].present? # when someone comes in with /username
       @user = User.find_by_login(params[:login]) || not_found("Unknown username")
       @profile = @user.profile
     elsif params[:id].present?
@@ -215,7 +215,7 @@ class ProfilesController < InheritedResources::Base
     if user_signed_in? and current_user.present?
       # make a record of the profile visit but don't count own profile visit
       if !@own_view and !@own_view_in_view_mode
-        NetworkUpdate.create(:actor_id => current_user.id, :action_id => 1, :recipient_id => @user.id, :content => "View", :source => "Blinkup")
+        NetworkUpdate.create(:actor_id => current_user.id, :action_id => 1, :recipient_id => @user.id, :content => "View")
         v = Visitor.new
         v.user_id = @user.id
         v.visitor_user_id = current_user.id
