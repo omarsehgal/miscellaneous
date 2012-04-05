@@ -1,0 +1,11 @@
+<h2>Me in the media <span class="save">save</span></h2>
+<%= form_for update_profile(@profile), :html => { :multipart => true } do |f| %>
+  <%= f.error_messages %>
+    <% f.fields_for :url_contact_infos do |builder| %>
+      <div class="fields">
+        <p><%= builder.text_field :value %> (<%= link_to_remove_fields "del", builder %>)</p>
+      </div>
+    <% end%>
+    <p><%= link_to_add_fields("Add", f, :url_contact_infos) %></p>
+  <%= hidden_field_tag "misc_info", "url_contact_info" %>
+<% end %>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" >
+    <style type="text/css" media="screen">
+        body {font-family: calibri; font-size: 11pt}
+        div {color: gray; font-style:italic; font-size: 9pt}
+    </style>
+  </head>
+  <body>
+    <div>
+      This is an automatic response, please do not reply.
+    </div>
+    <p>
+        Dear <%= get_email_name(@project_user.sponsor) %>,<br/><br/>
+
+        We have received a join <%= @project_user.project %> project request from <%= get_full_name(@project_user.name) %>,
+        who has indicated you as the sponsor manager.<br/><br/>
+
+        Please visit <%= link_to "Project Access Request", "http://scyweb05.sc.intel.com:3005/project_users" %> to view and approve the request. <br/><br/>
+
+        Thank you,<br/>
+        DA-iTeam
+
+    </p>
+
+    <div>
+      This was sent via Project Access Request (<%= link_to "http://goto/iteam", "goto/iteam" %>)
+    </div>
+  </body>
+</html>

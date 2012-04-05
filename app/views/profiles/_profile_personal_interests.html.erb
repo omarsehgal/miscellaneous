@@ -1,0 +1,19 @@
+<h2>
+  PERSONAL INTERESTS <% unless @profile.full_profile_at.nil? and @own_view == 0 %>(hobbies, travel, etc)<% end %>
+  <span class="edit">edit</span>
+</h2>
+<% if @profile.full_profile_at.nil? %>
+  <p>
+    <% if @linkedin_profile.interests.empty? %>
+      Please add..
+    <% else %>
+      <%= @linkedin_profile.interests %>
+    <% end %>
+  </p>
+<% else %>
+  <% if @profile.personal_interests.present? %>
+    <p><%= @profile.personal_interests %></p>
+  <% else %>
+    <p>Please add..</p>
+  <% end %>
+<% end %>

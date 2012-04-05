@@ -1,0 +1,11 @@
+<h3>Company Size</h3>
+<a class="edit">edit</a>
+<% if @profile.positions.default.present? %>
+  <% if @profile.positions.default.first.company_size.present? %>
+    <span><%= @profile.positions.default.first.company_size.name %></span>
+  <% else %>
+    <span>Please add..</span>
+  <% end %>
+<% else %>
+  <span>Please add..</span>
+<% end %>

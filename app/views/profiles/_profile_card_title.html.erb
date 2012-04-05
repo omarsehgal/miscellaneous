@@ -1,0 +1,21 @@
+<% if @profile.full_profile_at.present? %>
+  <% if @profile.positions.default.first.present? %>
+    <li><%= @profile.positions.default.first.title %></li>
+    <% if @profile.positions.default.first.company.present? %>
+      <li><%= @profile.positions.default.first.company.name %></li>
+    <% end %>
+  <% end %>
+<% else %>
+  <% if @linkedin_profile.positions.present? %>
+    <% if @linkedin_profile.positions.first.present? %>
+      <% if @linkedin_profile.positions.first.title.present? %>
+        <li><%= @linkedin_profile.positions.first.title %></li>
+      <% end %>
+      <% if @linkedin_profile.positions.first.company.present? %>
+        <% if @linkedin_profile.positions.first.company.name.present? %>
+          <li><%= @linkedin_profile.positions.first.company.name %></li>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

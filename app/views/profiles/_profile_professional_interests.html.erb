@@ -1,0 +1,7 @@
+<h2>Professional Interests<span class="edit">edit</span>
+</h2>
+<% if @profile.professional_interests.present? %>
+  <p><%= @profile.professional_interests %></p>
+<% else %>
+  <p>Please add..</p>
+<% end %>

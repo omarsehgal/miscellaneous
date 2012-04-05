@@ -1,0 +1,28 @@
+<table class="table-display">
+  <tr>
+    <th>Category</th>
+    <th>Owner(s)</th>
+    <th>Team Name</th>
+    <th># Q's</th>
+    <th colspan="1">Admin options</th>
+  </tr>
+  <% for category in @categories %>
+    <tr>
+      <td><%= category.name %></td>
+      <td>
+        <div id="<%= category.id %>" class="cat-owner-edit">
+          <%= category.owner %>
+        </div>
+      </td>
+      <td><%= Team.find(category.team_id).name %></td>
+      <td><%= category.questions.count %></td>
+
+      <% if !category.owner.nil? %>
+        <% if category.has_owner?(session[:idsid]) %>
+          <td><%= link_to "Edit", edit_category_path(category) %></td>
+          <!--<td><%# button_to "Destroy", category, {:onclick => "return confirm('Are you sure?')", :method => :delete} %></td>-->
+        <% end %>
+      <% end %>
+    </tr>
+  <% end %>
+</table>

@@ -1,0 +1,7 @@
+<h3>Email</h3>
+<a class="edit">edit</a>
+<% if @user.email.present? %>
+  <span><%= raw(MagickTitle.say(@user.email, :font => 'Arial', :font_size => '13', :color => '#000000').to_html(false)) %></span>
+<% else %>
+  <span>Please add..</span>
+<% end %>

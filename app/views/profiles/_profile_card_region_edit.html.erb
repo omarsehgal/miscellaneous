@@ -1,0 +1,8 @@
+<h3>Region</h3>
+<a class="save" href="">save</a>
+<%= form_for @profile do |f| %>
+  <%= fields_for :location do |location| %>
+    <%= location.text_field :city, :value => @profile.location.city, :size => 20, :class => "click-to-save" %>
+  <% end %>
+  <%= hidden_field_tag "profile_card", "region" %>
+<% end %>

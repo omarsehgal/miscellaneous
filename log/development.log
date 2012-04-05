@@ -1,0 +1,364 @@
+DEPRECATION WARNING: config.action_view.debug_rjs will be removed in 3.1, from 3.1 onwards you will need to install prototype-rails to continue to use RJS templates . (called from <top (required)> at /Users/omarsehgal/Rails/seek_out/config/environment.rb:5)
+  [1m[36mSQL (0.2ms)[0m  [1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [1m[35mSQL (0.1ms)[0m  select sqlite_version(*)
+  [1m[36mSQL (1.6ms)[0m  [1mCREATE TABLE "schema_migrations" ("version" varchar(255) NOT NULL) [0m
+  [1m[35mSQL (0.0ms)[0m  PRAGMA index_list("schema_migrations")
+  [1m[36mSQL (1.0ms)[0m  [1mCREATE UNIQUE INDEX "unique_schema_migrations" ON "schema_migrations" ("version")[0m
+  [1m[35mSQL (0.1ms)[0m   SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+  [1m[36mSQL (0.2ms)[0m  [1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [1m[35mSQL (0.1ms)[0m  SELECT "schema_migrations"."version" FROM "schema_migrations"
+Migrating to CreateAnnouncements (20110804224723)
+  [1m[36mSQL (0.4ms)[0m  [1mCREATE TABLE "announcements" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "content" varchar(255), "created_by" varchar(255), "created_at" datetime, "updated_at" datetime) [0m
+  [1m[35mSQL (0.1ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ('20110804224723')
+Migrating to AddFieldsToAnnouncements (20110804232605)
+  [1m[36mSQL (0.4ms)[0m  [1mALTER TABLE "announcements" ADD "title" varchar(255)[0m
+  [1m[35mSQL (0.2ms)[0m  ALTER TABLE "announcements" ADD "att_path" varchar(255)
+  [1m[36mSQL (0.2ms)[0m  [1mALTER TABLE "announcements" ADD "project_id" integer[0m
+  [1m[35mSQL (0.1ms)[0m  ALTER TABLE "announcements" ADD "category_id" integer
+  [1m[36mSQL (0.1ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ('20110804232605')[0m
+Migrating to CreateCategories (20110810235407)
+  [1m[35mSQL (0.3ms)[0m  CREATE TABLE "categories" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar(255), "team_id" integer, "created_at" datetime, "updated_at" datetime) 
+  [1m[36mSQL (0.1ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ('20110810235407')[0m
+Migrating to CreateTeams (20110810235817)
+  [1m[35mSQL (0.3ms)[0m  CREATE TABLE "teams" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar(255), "created_at" datetime, "updated_at" datetime) 
+  [1m[36mSQL (0.1ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ('20110810235817')[0m
+Migrating to CreateQuestions (20110811000340)
+  [1m[35mSQL (0.4ms)[0m  CREATE TABLE "questions" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "category_id" integer, "content" text, "created_at" datetime, "updated_at" datetime) 
+  [1m[36mSQL (0.1ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ('20110811000340')[0m
+Migrating to CreateAnswers (20110811004018)
+  [1m[35mSQL (0.4ms)[0m  CREATE TABLE "answers" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "question_id" integer, "content" text, "created_at" datetime, "updated_at" datetime) 
+  [1m[36mSQL (0.1ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ('20110811004018')[0m
+Migrating to CreateMembers (20110819175322)
+  [1m[35mSQL (0.4ms)[0m  CREATE TABLE "members" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar(255), "coverage_area" varchar(255), "ooo_info" varchar(255), "fav_snack" varchar(255), "created_at" datetime, "updated_at" datetime) 
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ('20110819175322')[0m
+Migrating to AddTeamLeadToMember (20110819180625)
+  [1m[35mSQL (0.4ms)[0m  ALTER TABLE "members" ADD "team_lead" integer
+  [1m[36mSQL (0.1ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ('20110819180625')[0m
+Migrating to CreateLikes (20110822185505)
+  [1m[35mSQL (0.4ms)[0m  CREATE TABLE "likes" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "answer_id" integer, "created_at" datetime, "updated_at" datetime) 
+  [1m[36mSQL (0.1ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ('20110822185505')[0m
+Migrating to AddPolyToLikes (20110822192316)
+  [1m[35mSQL (0.3ms)[0m  ALTER TABLE "likes" ADD "likeable_id" integer
+  [1m[36mSQL (0.2ms)[0m  [1mALTER TABLE "likes" ADD "likeable_type" varchar(255)[0m
+  [1m[35mSQL (0.1ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ('20110822192316')
+Migrating to AddFieldToAnswers (20110822220952)
+  [1m[36mSQL (0.4ms)[0m  [1mALTER TABLE "answers" ADD "tup" integer[0m
+  [1m[35mSQL (0.2ms)[0m  ALTER TABLE "answers" ADD "tdown" integer
+  [1m[36mSQL (0.1ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ('20110822220952')[0m
+Migrating to AddDefaultToAnswers (20110822222620)
+  [1m[35mSQL (48.5ms)[0m  CREATE TEMPORARY TABLE "altered_answers" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "question_id" integer, "content" text, "created_at" datetime, "updated_at" datetime, "tup" integer, "tdown" integer) 
+  [1m[36mSQL (0.0ms)[0m  [1mPRAGMA index_list("answers")[0m
+  [1m[35mSQL (0.4ms)[0m  DROP TABLE "answers"
+  [1m[36mSQL (0.2ms)[0m  [1mCREATE TABLE "answers" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "question_id" integer, "content" text, "created_at" datetime, "updated_at" datetime, "tup" integer DEFAULT 0, "tdown" integer) [0m
+  [1m[35mSQL (0.0ms)[0m  PRAGMA index_list("altered_answers")
+  [1m[36mSQL (11.1ms)[0m  [1mDROP TABLE "altered_answers"[0m
+  [1m[35mSQL (0.2ms)[0m  CREATE TEMPORARY TABLE "altered_answers" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "question_id" integer, "content" text, "created_at" datetime, "updated_at" datetime, "tup" integer DEFAULT 0, "tdown" integer) 
+  [1m[36mSQL (0.0ms)[0m  [1mPRAGMA index_list("answers")[0m
+  [1m[35mSQL (0.2ms)[0m  DROP TABLE "answers"
+  [1m[36mSQL (0.2ms)[0m  [1mCREATE TABLE "answers" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "question_id" integer, "content" text, "created_at" datetime, "updated_at" datetime, "tup" integer DEFAULT 0, "tdown" integer DEFAULT 0) [0m
+  [1m[35mSQL (0.0ms)[0m  PRAGMA index_list("altered_answers")
+  [1m[36mSQL (0.2ms)[0m  [1mDROP TABLE "altered_answers"[0m
+  [1m[35mSQL (0.1ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ('20110822222620')
+Migrating to AddFieldsToMembers (20110825234556)
+  [1m[36mSQL (0.4ms)[0m  [1mALTER TABLE "members" ADD "site" varchar(255)[0m
+  [1m[35mSQL (0.1ms)[0m  ALTER TABLE "members" ADD "projects" varchar(255)
+  [1m[36mSQL (0.1ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ('20110825234556')[0m
+Migrating to CreateKeywords (20110830192859)
+  [1m[35mSQL (0.5ms)[0m  CREATE TABLE "keywords" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "content" varchar(255), "created_at" datetime, "updated_at" datetime) 
+  [1m[36mSQL (0.1ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ('20110830192859')[0m
+Migrating to AddAttachmentToAnswer (20110907215451)
+  [1m[35mSQL (0.5ms)[0m  ALTER TABLE "answers" ADD "file_name" varchar(255)
+  [1m[36mSQL (0.2ms)[0m  [1mALTER TABLE "answers" ADD "content_type" varchar(255)[0m
+  [1m[35mSQL (0.1ms)[0m  ALTER TABLE "answers" ADD "file_size" integer
+  [1m[36mSQL (0.1ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ('20110907215451')[0m
+Migrating to AddChangeToAnswers (20110908205642)
+  [1m[35mSQL (0.3ms)[0m  CREATE TEMPORARY TABLE "altered_answers" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "question_id" integer, "content" text, "created_at" datetime, "updated_at" datetime, "tup" integer DEFAULT 0, "tdown" integer DEFAULT 0, "attachment_file_name" varchar(255), "content_type" varchar(255), "file_size" integer) 
+  [1m[36mSQL (0.0ms)[0m  [1mPRAGMA index_list("answers")[0m
+  [1m[35mSQL (0.4ms)[0m  DROP TABLE "answers"
+  [1m[36mSQL (0.2ms)[0m  [1mCREATE TABLE "answers" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "question_id" integer, "content" text, "created_at" datetime, "updated_at" datetime, "tup" integer DEFAULT 0, "tdown" integer DEFAULT 0, "attachment_file_name" varchar(255), "content_type" varchar(255), "file_size" integer) [0m
+  [1m[35mSQL (0.0ms)[0m  PRAGMA index_list("altered_answers")
+  [1m[36mSQL (0.2ms)[0m  [1mDROP TABLE "altered_answers"[0m
+  [1m[35mSQL (0.2ms)[0m  CREATE TEMPORARY TABLE "altered_answers" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "question_id" integer, "content" text, "created_at" datetime, "updated_at" datetime, "tup" integer DEFAULT 0, "tdown" integer DEFAULT 0, "attachment_file_name" varchar(255), "attachment_content_type" varchar(255), "file_size" integer) 
+  [1m[36mSQL (0.0ms)[0m  [1mPRAGMA index_list("answers")[0m
+  [1m[35mSQL (0.3ms)[0m  DROP TABLE "answers"
+  [1m[36mSQL (0.2ms)[0m  [1mCREATE TABLE "answers" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "question_id" integer, "content" text, "created_at" datetime, "updated_at" datetime, "tup" integer DEFAULT 0, "tdown" integer DEFAULT 0, "attachment_file_name" varchar(255), "attachment_content_type" varchar(255), "file_size" integer) [0m
+  [1m[35mSQL (0.0ms)[0m  PRAGMA index_list("altered_answers")
+  [1m[36mSQL (0.2ms)[0m  [1mDROP TABLE "altered_answers"[0m
+  [1m[35mSQL (0.2ms)[0m  CREATE TEMPORARY TABLE "altered_answers" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "question_id" integer, "content" text, "created_at" datetime, "updated_at" datetime, "tup" integer DEFAULT 0, "tdown" integer DEFAULT 0, "attachment_file_name" varchar(255), "attachment_content_type" varchar(255), "attachment_file_size" integer) 
+  [1m[36mSQL (0.0ms)[0m  [1mPRAGMA index_list("answers")[0m
+  [1m[35mSQL (0.2ms)[0m  DROP TABLE "answers"
+  [1m[36mSQL (0.2ms)[0m  [1mCREATE TABLE "answers" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "question_id" integer, "content" text, "created_at" datetime, "updated_at" datetime, "tup" integer DEFAULT 0, "tdown" integer DEFAULT 0, "attachment_file_name" varchar(255), "attachment_content_type" varchar(255), "attachment_file_size" integer) [0m
+  [1m[35mSQL (0.0ms)[0m  PRAGMA index_list("altered_answers")
+  [1m[36mSQL (0.2ms)[0m  [1mDROP TABLE "altered_answers"[0m
+  [1m[35mSQL (0.1ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ('20110908205642')
+Migrating to AddAdminToTeam (20110912235149)
+  [1m[36mSQL (0.4ms)[0m  [1mALTER TABLE "teams" ADD "admin" varchar(255)[0m
+  [1m[35mSQL (0.1ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ('20110912235149')
+Migrating to AddOwnerToCategory (20110912235418)
+  [1m[36mSQL (0.3ms)[0m  [1mALTER TABLE "categories" ADD "owner" varchar(255)[0m
+  [1m[35mSQL (0.1ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ('20110912235418')
+Migrating to CreateCkeditorAssets (20111007160601)
+  [1m[36mSQL (0.3ms)[0m  [1mCREATE TABLE "ckeditor_assets" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "data_file_name" varchar(255) NOT NULL, "data_content_type" varchar(255), "data_file_size" integer, "assetable_id" integer, "assetable_type" varchar(30), "type" varchar(25), "guid" varchar(10), "locale" integer(1) DEFAULT 0, "user_id" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [1m[35mSQL (0.0ms)[0m  PRAGMA index_list("ckeditor_assets")
+  [1m[36mSQL (0.1ms)[0m  [1mCREATE INDEX "idx_assetable_type" ON "ckeditor_assets" ("assetable_type", "type", "assetable_id")[0m
+  [1m[35mSQL (0.1ms)[0m  PRAGMA index_list("ckeditor_assets")
+  [1m[36mSQL (0.1ms)[0m  [1mPRAGMA index_info('idx_assetable_type')[0m
+  [1m[35mSQL (0.1ms)[0m  CREATE INDEX "fk_assetable" ON "ckeditor_assets" ("assetable_type", "assetable_id")
+  [1m[36mSQL (0.1ms)[0m  [1mPRAGMA index_list("ckeditor_assets")[0m
+  [1m[35mSQL (0.0ms)[0m  PRAGMA index_info('fk_assetable')
+  [1m[36mSQL (0.0ms)[0m  [1mPRAGMA index_info('idx_assetable_type')[0m
+  [1m[35mSQL (0.1ms)[0m  CREATE INDEX "fk_user" ON "ckeditor_assets" ("user_id")
+  [1m[36mSQL (0.1ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ('20111007160601')[0m
+Migrating to AddUserToAnswers (20111021181956)
+  [1m[35mSQL (0.3ms)[0m  ALTER TABLE "answers" ADD "user" varchar(255)
+  [1m[36mSQL (0.1ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ('20111021181956')[0m
+Migrating to AddUserToQuestions (20111021232352)
+  [1m[35mSQL (0.4ms)[0m  ALTER TABLE "questions" ADD "user" varchar(255)
+  [1m[36mSQL (0.1ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ('20111021232352')[0m
+Migrating to AddIdsidToMembers (20111110223926)
+  [1m[35mSQL (0.4ms)[0m  ALTER TABLE "members" ADD "idsid" varchar(255)
+  [1m[36mSQL (0.1ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ('20111110223926')[0m
+Migrating to AddAttachmentToAnnouncement (20111110233241)
+  [1m[35mSQL (0.4ms)[0m  ALTER TABLE "announcements" ADD "file_name" varchar(255)
+  [1m[36mSQL (0.3ms)[0m  [1mALTER TABLE "announcements" ADD "content_type" varchar(255)[0m
+  [1m[35mSQL (0.3ms)[0m  ALTER TABLE "announcements" ADD "file_size" integer
+  [1m[36mSQL (0.1ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ('20111110233241')[0m
+Migrating to ChangeAttachmentToAnnouncement (20111110233541)
+  [1m[35mSQL (0.2ms)[0m  CREATE TEMPORARY TABLE "altered_announcements" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "content" varchar(255), "created_by" varchar(255), "created_at" datetime, "updated_at" datetime, "title" varchar(255), "att_path" varchar(255), "project_id" integer, "category_id" integer, "attachment_file_name" varchar(255), "content_type" varchar(255), "file_size" integer) 
+  [1m[36mSQL (0.0ms)[0m  [1mPRAGMA index_list("announcements")[0m
+  [1m[35mSQL (0.4ms)[0m  DROP TABLE "announcements"
+  [1m[36mSQL (0.2ms)[0m  [1mCREATE TABLE "announcements" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "content" varchar(255), "created_by" varchar(255), "created_at" datetime, "updated_at" datetime, "title" varchar(255), "att_path" varchar(255), "project_id" integer, "category_id" integer, "attachment_file_name" varchar(255), "content_type" varchar(255), "file_size" integer) [0m
+  [1m[35mSQL (0.0ms)[0m  PRAGMA index_list("altered_announcements")
+  [1m[36mSQL (0.2ms)[0m  [1mDROP TABLE "altered_announcements"[0m
+  [1m[35mSQL (0.3ms)[0m  CREATE TEMPORARY TABLE "altered_announcements" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "content" varchar(255), "created_by" varchar(255), "created_at" datetime, "updated_at" datetime, "title" varchar(255), "att_path" varchar(255), "project_id" integer, "category_id" integer, "attachment_file_name" varchar(255), "attachment_content_type" varchar(255), "file_size" integer) 
+  [1m[36mSQL (0.1ms)[0m  [1mPRAGMA index_list("announcements")[0m
+  [1m[35mSQL (0.2ms)[0m  DROP TABLE "announcements"
+  [1m[36mSQL (0.2ms)[0m  [1mCREATE TABLE "announcements" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "content" varchar(255), "created_by" varchar(255), "created_at" datetime, "updated_at" datetime, "title" varchar(255), "att_path" varchar(255), "project_id" integer, "category_id" integer, "attachment_file_name" varchar(255), "attachment_content_type" varchar(255), "file_size" integer) [0m
+  [1m[35mSQL (0.0ms)[0m  PRAGMA index_list("altered_announcements")
+  [1m[36mSQL (0.2ms)[0m  [1mDROP TABLE "altered_announcements"[0m
+  [1m[35mSQL (0.2ms)[0m  CREATE TEMPORARY TABLE "altered_announcements" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "content" varchar(255), "created_by" varchar(255), "created_at" datetime, "updated_at" datetime, "title" varchar(255), "att_path" varchar(255), "project_id" integer, "category_id" integer, "attachment_file_name" varchar(255), "attachment_content_type" varchar(255), "attachment_file_size" integer) 
+  [1m[36mSQL (0.0ms)[0m  [1mPRAGMA index_list("announcements")[0m
+  [1m[35mSQL (0.2ms)[0m  DROP TABLE "announcements"
+  [1m[36mSQL (0.2ms)[0m  [1mCREATE TABLE "announcements" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "content" varchar(255), "created_by" varchar(255), "created_at" datetime, "updated_at" datetime, "title" varchar(255), "att_path" varchar(255), "project_id" integer, "category_id" integer, "attachment_file_name" varchar(255), "attachment_content_type" varchar(255), "attachment_file_size" integer) [0m
+  [1m[35mSQL (0.0ms)[0m  PRAGMA index_list("altered_announcements")
+  [1m[36mSQL (0.1ms)[0m  [1mDROP TABLE "altered_announcements"[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ('20111110233541')
+Migrating to AddFiendsToAnnouncements (20111117185956)
+  [1m[36mSQL (0.5ms)[0m  [1mALTER TABLE "announcements" ADD "team_id" integer[0m
+  [1m[35mSQL (0.2ms)[0m  ALTER TABLE "announcements" ADD "email_list" varchar(255)
+  [1m[36mSQL (0.1ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ('20111117185956')[0m
+Migrating to CreateDocuments (20111118194239)
+  [1m[35mSQL (0.4ms)[0m  CREATE TABLE "documents" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar(255), "description" varchar(255), "attachment_file_name" varchar(255), "attachment_content_type" varchar(255), "attachment_file_size" integer, "owner" varchar(255), "created_at" datetime, "updated_at" datetime) 
+  [1m[36mSQL (0.1ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ('20111118194239')[0m
+Migrating to CreateLinks (20111118221312)
+  [1m[35mSQL (0.4ms)[0m  CREATE TABLE "links" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar(255), "description" varchar(255), "link_name" varchar(255), "created_by" varchar(255), "created_at" datetime, "updated_at" datetime) 
+  [1m[36mSQL (0.1ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ('20111118221312')[0m
+Migrating to ChangeLinknameToLink (20111118222845)
+  [1m[35mSQL (0.2ms)[0m  CREATE TEMPORARY TABLE "altered_links" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar(255), "description" varchar(255), "link" varchar(255), "created_by" varchar(255), "created_at" datetime, "updated_at" datetime) 
+  [1m[36mSQL (0.0ms)[0m  [1mPRAGMA index_list("links")[0m
+  [1m[35mSQL (0.4ms)[0m  DROP TABLE "links"
+  [1m[36mSQL (0.2ms)[0m  [1mCREATE TABLE "links" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar(255), "description" varchar(255), "link" varchar(255), "created_by" varchar(255), "created_at" datetime, "updated_at" datetime) [0m
+  [1m[35mSQL (0.0ms)[0m  PRAGMA index_list("altered_links")
+  [1m[36mSQL (0.2ms)[0m  [1mDROP TABLE "altered_links"[0m
+  [1m[35mSQL (0.1ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ('20111118222845')
+Migrating to AddShowHomeToLink (20111128192003)
+  [1m[36mSQL (0.4ms)[0m  [1mALTER TABLE "links" ADD "show_home" boolean DEFAULT 0[0m
+  [1m[35mSQL (0.1ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ('20111128192003')
+Migrating to AddShowHomeToDocument (20111128192022)
+  [1m[36mSQL (0.4ms)[0m  [1mALTER TABLE "documents" ADD "show_home" boolean DEFAULT 0[0m
+  [1m[35mSQL (0.1ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ('20111128192022')
+Migrating to AddEmailToCategory (20111128193114)
+  [1m[36mSQL (0.3ms)[0m  [1mALTER TABLE "categories" ADD "email" varchar(255)[0m
+  [1m[35mSQL (0.1ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ('20111128193114')
+Migrating to AddTwoMoreFieldsToAnnouncements (20111129192738)
+  [1m[36mSQL (0.3ms)[0m  [1mALTER TABLE "announcements" ADD "from_email" varchar(255)[0m
+  [1m[35mSQL (0.2ms)[0m  ALTER TABLE "announcements" ADD "status" varchar(255)
+  [1m[36mSQL (0.1ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ('20111129192738')[0m
+Migrating to AddYetAnotherColumnToAnnouncements (20111130014638)
+  [1m[35mSQL (0.3ms)[0m  ALTER TABLE "announcements" ADD "sent_at" datetime
+  [1m[36mSQL (0.1ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ('20111130014638')[0m
+Migrating to ChangeContentDataTypeForAnnouncements (20111130020140)
+  [1m[35mSQL (0.2ms)[0m  CREATE TEMPORARY TABLE "altered_announcements" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "content" varchar(255), "created_by" varchar(255), "created_at" datetime, "updated_at" datetime, "title" varchar(255), "att_path" varchar(255), "project_id" integer, "category_id" integer, "attachment_file_name" varchar(255), "attachment_content_type" varchar(255), "attachment_file_size" integer, "team_id" integer, "email_list" varchar(255), "from_email" varchar(255), "status" varchar(255), "sent_at" datetime) 
+  [1m[36mSQL (0.0ms)[0m  [1mPRAGMA index_list("announcements")[0m
+  [1m[35mSQL (0.4ms)[0m  DROP TABLE "announcements"
+  [1m[36mSQL (0.2ms)[0m  [1mCREATE TABLE "announcements" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "content" text(255), "created_by" varchar(255), "created_at" datetime, "updated_at" datetime, "title" varchar(255), "att_path" varchar(255), "project_id" integer, "category_id" integer, "attachment_file_name" varchar(255), "attachment_content_type" varchar(255), "attachment_file_size" integer, "team_id" integer, "email_list" varchar(255), "from_email" varchar(255), "status" varchar(255), "sent_at" datetime) [0m
+  [1m[35mSQL (0.0ms)[0m  PRAGMA index_list("altered_announcements")
+  [1m[36mSQL (0.2ms)[0m  [1mDROP TABLE "altered_announcements"[0m
+  [1m[35mSQL (0.1ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ('20111130020140')
+Migrating to CreateAddrBooks (20111206214218)
+  [1m[36mSQL (0.3ms)[0m  [1mCREATE TABLE "addr_books" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar(255), "email" varchar(255), "idsid" varchar(255), "type" varchar(255), "created_by" varchar(255), "created_at" datetime, "updated_at" datetime) [0m
+  [1m[35mSQL (0.1ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ('20111206214218')
+Migrating to ChangeTypeNameForAddrBook (20111206224022)
+  [1m[36mSQL (0.2ms)[0m  [1mCREATE TEMPORARY TABLE "altered_addr_books" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar(255), "email" varchar(255), "idsid" varchar(255), "category" varchar(255), "created_by" varchar(255), "created_at" datetime, "updated_at" datetime) [0m
+  [1m[35mSQL (0.0ms)[0m  PRAGMA index_list("addr_books")
+  [1m[36mSQL (0.4ms)[0m  [1mDROP TABLE "addr_books"[0m
+  [1m[35mSQL (0.2ms)[0m  CREATE TABLE "addr_books" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar(255), "email" varchar(255), "idsid" varchar(255), "category" varchar(255), "created_by" varchar(255), "created_at" datetime, "updated_at" datetime) 
+  [1m[36mSQL (0.0ms)[0m  [1mPRAGMA index_list("altered_addr_books")[0m
+  [1m[35mSQL (0.2ms)[0m  DROP TABLE "altered_addr_books"
+  [1m[36mSQL (0.1ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ('20111206224022')[0m
+Migrating to AddCcToAnnouncements (20111207223349)
+  [1m[35mSQL (0.4ms)[0m  ALTER TABLE "announcements" ADD "cc_list" text
+  [1m[36mSQL (0.1ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ('20111207223349')[0m
+Migrating to AddCategoryForDocuments (20111212215234)
+  [1m[35mSQL (0.4ms)[0m  ALTER TABLE "documents" ADD "category" varchar(255)
+  [1m[36mSQL (0.1ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ('20111212215234')[0m
+Migrating to CreateServers (20111213233048)
+  [1m[35mSQL (0.4ms)[0m  CREATE TABLE "servers" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar(255), "team_id" integer, "created_by" varchar(255), "type" varchar(255), "created_at" datetime, "updated_at" datetime) 
+  [1m[36mSQL (0.1ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ('20111213233048')[0m
+Migrating to AddDescriptionToServers (20111214001815)
+  [1m[35mSQL (0.4ms)[0m  ALTER TABLE "servers" ADD "description" text
+  [1m[36mSQL (0.1ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ('20111214001815')[0m
+Migrating to ChangeTypeInServers (20111214004728)
+  [1m[35mSQL (0.3ms)[0m  CREATE TEMPORARY TABLE "altered_servers" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar(255), "team_id" integer, "created_by" varchar(255), "category" varchar(255), "created_at" datetime, "updated_at" datetime, "description" text) 
+  [1m[36mSQL (0.0ms)[0m  [1mPRAGMA index_list("servers")[0m
+  [1m[35mSQL (0.4ms)[0m  DROP TABLE "servers"
+  [1m[36mSQL (0.2ms)[0m  [1mCREATE TABLE "servers" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar(255), "team_id" integer, "created_by" varchar(255), "category" varchar(255), "created_at" datetime, "updated_at" datetime, "description" text) [0m
+  [1m[35mSQL (0.0ms)[0m  PRAGMA index_list("altered_servers")
+  [1m[36mSQL (0.2ms)[0m  [1mDROP TABLE "altered_servers"[0m
+  [1m[35mSQL (0.1ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ('20111214004728')
+Migrating to CreateMonitorActions (20111214214614)
+  [1m[36mSQL (0.4ms)[0m  [1mCREATE TABLE "monitor_actions" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar(255), "category" varchar(255), "script" text, "description" text, "created_by" varchar(255), "status" varchar(255), "created_at" datetime, "updated_at" datetime) [0m
+  [1m[35mSQL (0.1ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ('20111214214614')
+Migrating to ChangeMonitorActionFields (20111215210414)
+  [1m[36mSQL (0.3ms)[0m  [1mALTER TABLE "monitor_actions" ADD "actionable_id" integer[0m
+  [1m[35mSQL (0.1ms)[0m  ALTER TABLE "monitor_actions" ADD "actionable_type" varchar(255)
+  [1m[36mSQL (0.2ms)[0m  [1mCREATE TEMPORARY TABLE "altered_monitor_actions" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar(255), "category" varchar(255), "script" text, "description" text, "created_by" varchar(255), "status" varchar(255), "created_at" datetime, "updated_at" datetime, "actionable_id" integer, "actionable_type" varchar(255)) [0m
+  [1m[35mSQL (0.0ms)[0m  PRAGMA index_list("monitor_actions")
+  [1m[36mSQL (0.3ms)[0m  [1mDROP TABLE "monitor_actions"[0m
+  [1m[35mSQL (0.2ms)[0m  CREATE TABLE "monitor_actions" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar(255), "script" text, "description" text, "created_by" varchar(255), "status" varchar(255), "created_at" datetime, "updated_at" datetime, "actionable_id" integer, "actionable_type" varchar(255)) 
+  [1m[36mSQL (0.0ms)[0m  [1mPRAGMA index_list("altered_monitor_actions")[0m
+  [1m[35mSQL (0.2ms)[0m  DROP TABLE "altered_monitor_actions"
+  [1m[36mSQL (0.1ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ('20111215210414')[0m
+Migrating to CreateProjectUsers (20120104020419)
+  [1m[35mSQL (0.3ms)[0m  CREATE TABLE "project_users" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar(255), "usertype" varchar(255), "sponsor" varchar(255), "team" varchar(255), "justification" text, "duration" integer, "diskspace" integer, "created_at" datetime, "updated_at" datetime) 
+  [1m[36mSQL (0.1ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ('20120104020419')[0m
+Migrating to AddProjectToProjectUsers (20120104020711)
+  [1m[35mSQL (0.8ms)[0m  ALTER TABLE "project_users" ADD "project" varchar(255)
+  [1m[36mSQL (0.1ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ('20120104020711')[0m
+Migrating to RenameUserTypeInProjectUsers (20120105003952)
+  [1m[35mSQL (0.2ms)[0m  CREATE TEMPORARY TABLE "altered_project_users" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar(255), "user_type" varchar(255), "sponsor" varchar(255), "team" varchar(255), "justification" text, "duration" integer, "diskspace" integer, "created_at" datetime, "updated_at" datetime, "project" varchar(255)) 
+  [1m[36mSQL (0.0ms)[0m  [1mPRAGMA index_list("project_users")[0m
+  [1m[35mSQL (0.4ms)[0m  DROP TABLE "project_users"
+  [1m[36mSQL (0.2ms)[0m  [1mCREATE TABLE "project_users" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar(255), "user_type" varchar(255), "sponsor" varchar(255), "team" varchar(255), "justification" text, "duration" integer, "diskspace" integer, "created_at" datetime, "updated_at" datetime, "project" varchar(255)) [0m
+  [1m[35mSQL (0.0ms)[0m  PRAGMA index_list("altered_project_users")
+  [1m[36mSQL (0.2ms)[0m  [1mDROP TABLE "altered_project_users"[0m
+  [1m[35mSQL (0.1ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ('20120105003952')
+Migrating to AddStatusToProjectUsers (20120105012118)
+  [1m[36mSQL (0.4ms)[0m  [1mALTER TABLE "project_users" ADD "status" varchar(255)[0m
+  [1m[35mSQL (0.1ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ('20120105012118')
+Migrating to AddDbOnlyColumnForDocuments (20120111224938)
+  [1m[36mSQL (0.4ms)[0m  [1mALTER TABLE "documents" ADD "DbTeam" boolean[0m
+  [1m[35mSQL (0.1ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ('20120111224938')
+Migrating to AddDbOnlyColumnForLinks (20120111224953)
+  [1m[36mSQL (0.4ms)[0m  [1mALTER TABLE "links" ADD "DbTeam" boolean[0m
+  [1m[35mSQL (0.1ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ('20120111224953')
+Migrating to CreateMonitorItems (20120120184719)
+  [1m[36mSQL (0.4ms)[0m  [1mCREATE TABLE "monitor_items" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar(255), "team_id" integer, "category" varchar(255), "description" text, "created_by" varchar(255), "created_at" datetime, "updated_at" datetime) [0m
+  [1m[35mSQL (0.1ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ('20120120184719')
+Migrating to EditFieldsInMonitorActions (20120120201623)
+  [1m[36mSQL (0.3ms)[0m  [1mCREATE TEMPORARY TABLE "altered_monitor_actions" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar(255), "script" text, "description" text, "created_by" varchar(255), "status" varchar(255), "created_at" datetime, "updated_at" datetime, "actionable_id" integer, "actionable_type" varchar(255)) [0m
+  [1m[35mSQL (0.1ms)[0m  PRAGMA index_list("monitor_actions")
+  [1m[36mSQL (0.5ms)[0m  [1mDROP TABLE "monitor_actions"[0m
+  [1m[35mSQL (0.3ms)[0m  CREATE TABLE "monitor_actions" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar(255), "script" text, "description" text, "created_by" varchar(255), "status" varchar(255), "created_at" datetime, "updated_at" datetime, "actionable_type" varchar(255)) 
+  [1m[36mSQL (0.0ms)[0m  [1mPRAGMA index_list("altered_monitor_actions")[0m
+  [1m[35mSQL (0.2ms)[0m  DROP TABLE "altered_monitor_actions"
+  [1m[36mSQL (0.2ms)[0m  [1mCREATE TEMPORARY TABLE "altered_monitor_actions" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar(255), "script" text, "description" text, "created_by" varchar(255), "status" varchar(255), "created_at" datetime, "updated_at" datetime, "actionable_type" varchar(255)) [0m
+  [1m[35mSQL (0.0ms)[0m  PRAGMA index_list("monitor_actions")
+  [1m[36mSQL (0.2ms)[0m  [1mDROP TABLE "monitor_actions"[0m
+  [1m[35mSQL (0.2ms)[0m  CREATE TABLE "monitor_actions" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar(255), "script" text, "description" text, "created_by" varchar(255), "status" varchar(255), "created_at" datetime, "updated_at" datetime) 
+  [1m[36mSQL (0.0ms)[0m  [1mPRAGMA index_list("altered_monitor_actions")[0m
+  [1m[35mSQL (0.2ms)[0m  DROP TABLE "altered_monitor_actions"
+  [1m[36mSQL (0.2ms)[0m  [1mALTER TABLE "monitor_actions" ADD "monitor_item_id" integer[0m
+  [1m[35mSQL (0.1ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ('20120120201623')
+Migrating to DropServersTable (20120120220623)
+  [1m[36mSQL (0.5ms)[0m  [1mDROP TABLE "servers"[0m
+  [1m[35mSQL (0.1ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ('20120120220623')
+Migrating to AddCategoryToLinks (20120125004712)
+  [1m[36mSQL (0.4ms)[0m  [1mALTER TABLE "links" ADD "category" varchar(255)[0m
+  [1m[35mSQL (0.1ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ('20120125004712')
+Migrating to AddSponsorStatusForProjectUsers (20120130221942)
+  [1m[36mSQL (0.4ms)[0m  [1mALTER TABLE "project_users" ADD "sponsor_approved" boolean[0m
+  [1m[35mSQL (0.1ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ('20120130221942')
+Migrating to AddDiskPathToProjectUsers (20120131030023)
+  [1m[36mSQL (0.4ms)[0m  [1mALTER TABLE "project_users" ADD "disk_path" varchar(255)[0m
+  [1m[35mSQL (0.1ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ('20120131030023')
+Migrating to CreateSponsorManagers (20120201224952)
+  [1m[36mSQL (0.3ms)[0m  [1mCREATE TABLE "sponsor_managers" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar(255), "team" varchar(255), "created_at" datetime, "updated_at" datetime) [0m
+  [1m[35mSQL (0.1ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ('20120201224952')
+Migrating to CreateApprovers (20120206230605)
+  [1m[36mSQL (0.3ms)[0m  [1mCREATE TABLE "approvers" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar(255), "idsid" varchar(255), "team" varchar(255), "created_at" datetime, "updated_at" datetime) [0m
+  [1m[35mSQL (0.1ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ('20120206230605')
+Migrating to DropSponsorManager (20120206232627)
+  [1m[36mSQL (0.8ms)[0m  [1mDROP TABLE "sponsor_managers"[0m
+  [1m[35mSQL (0.1ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ('20120206232627')
+Migrating to AddTeamIdToMembers (20120209180717)
+  [1m[36mSQL (0.5ms)[0m  [1mALTER TABLE "members" ADD "team_id" integer[0m
+  [1m[35mSQL (0.1ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ('20120209180717')
+Migrating to AddDbadminToMembers (20120209181127)
+  [1m[36mSQL (0.4ms)[0m  [1mALTER TABLE "members" ADD "dbadmin" integer[0m
+  [1m[35mSQL (0.1ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ('20120209181127')
+  [1m[36mSQL (0.6ms)[0m  [1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [1m[35mSQL (0.8ms)[0m  SELECT "schema_migrations"."version" FROM "schema_migrations"
+  [1m[36mSQL (0.3ms)[0m  [1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [1m[35mSQL (0.0ms)[0m  PRAGMA index_list("addr_books")
+  [1m[36mSQL (0.0ms)[0m  [1mPRAGMA index_list("announcements")[0m
+  [1m[35mSQL (0.0ms)[0m  PRAGMA index_list("answers")
+  [1m[36mSQL (0.0ms)[0m  [1mPRAGMA index_list("approvers")[0m
+  [1m[35mSQL (0.0ms)[0m  PRAGMA index_list("categories")
+  [1m[36mSQL (0.1ms)[0m  [1mPRAGMA index_list("ckeditor_assets")[0m
+  [1m[35mSQL (0.0ms)[0m  PRAGMA index_info('fk_user')
+  [1m[36mSQL (0.0ms)[0m  [1mPRAGMA index_info('fk_assetable')[0m
+  [1m[35mSQL (0.1ms)[0m  PRAGMA index_info('idx_assetable_type')
+  [1m[36mSQL (0.0ms)[0m  [1mPRAGMA index_list("documents")[0m
+  [1m[35mSQL (0.0ms)[0m  PRAGMA index_list("keywords")
+  [1m[36mSQL (0.0ms)[0m  [1mPRAGMA index_list("likes")[0m
+  [1m[35mSQL (0.0ms)[0m  PRAGMA index_list("links")
+  [1m[36mSQL (0.0ms)[0m  [1mPRAGMA index_list("members")[0m
+  [1m[35mSQL (0.0ms)[0m  PRAGMA index_list("monitor_actions")
+  [1m[36mSQL (0.0ms)[0m  [1mPRAGMA index_list("monitor_items")[0m
+  [1m[35mSQL (0.0ms)[0m  PRAGMA index_list("project_users")
+  [1m[36mSQL (0.0ms)[0m  [1mPRAGMA index_list("questions")[0m
+  [1m[35mSQL (0.0ms)[0m  PRAGMA index_list("teams")
+DEPRECATION WARNING: config.action_view.debug_rjs will be removed in 3.1, from 3.1 onwards you will need to install prototype-rails to continue to use RJS templates . (called from <top (required)> at /Users/omarsehgal/Rails/seek_out/config/environment.rb:5)
+DEPRECATION WARNING: config.action_view.debug_rjs will be removed in 3.1, from 3.1 onwards you will need to install prototype-rails to continue to use RJS templates . (called from <top (required)> at /Users/omarsehgal/Rails/seek_out/config/environment.rb:5)
+DEPRECATION WARNING: config.action_view.debug_rjs will be removed in 3.1, from 3.1 onwards you will need to install prototype-rails to continue to use RJS templates . (called from <top (required)> at /Users/omarsehgal/Rails/seek_out/config/environment.rb:5)
+
+
+Started GET "/" for 127.0.0.1 at 2012-03-14 17:23:45 -0700
+  Processing by PagesController#home as HTML
+Redirected to http://da-iteam.sc.intel.com/cgi-bin/whoisit_dev.cgi
+Completed 302 Found in 1ms
+
+
+Started GET "/" for 127.0.0.1 at 2012-03-14 17:23:58 -0700
+  Processing by PagesController#home as HTML
+Redirected to http://da-iteam.sc.intel.com/cgi-bin/whoisit_dev.cgi
+Completed 302 Found in 0ms
+
+
+Started GET "/" for 127.0.0.1 at 2012-03-14 17:25:10 -0700
+  Processing by PagesController#home as HTML
+  [1m[36mMember Load (0.7ms)[0m  [1mSELECT "members".* FROM "members"[0m
+Completed 500 Internal Server Error in 118ms
+
+NameError (uninitialized constant PagesController::Announcement):
+  app/controllers/pages_controller.rb:6:in `home'
+
+Rendered /Users/omarsehgal/.rvm/gems/ruby-1.9.2-p290@rails3/gems/actionpack-3.0.9/lib/action_dispatch/middleware/templates/rescues/_trace.erb (1.9ms)
+Rendered /Users/omarsehgal/.rvm/gems/ruby-1.9.2-p290@rails3/gems/actionpack-3.0.9/lib/action_dispatch/middleware/templates/rescues/_request_and_response.erb (2.7ms)
+Rendered /Users/omarsehgal/.rvm/gems/ruby-1.9.2-p290@rails3/gems/actionpack-3.0.9/lib/action_dispatch/middleware/templates/rescues/diagnostics.erb within rescues/layout (14.5ms)
+DEPRECATION WARNING: config.action_view.debug_rjs will be removed in 3.1, from 3.1 onwards you will need to install prototype-rails to continue to use RJS templates . (called from <top (required)> at /Users/omarsehgal/Rails/seek_out/config/environment.rb:5)

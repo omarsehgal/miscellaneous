@@ -1,0 +1,11 @@
+<h3>Country</h3>
+<a class="edit">edit</a>
+<% if @profile.location.present? %>
+  <% if @profile.location.country.present? %>
+    <span><%= @profile.location.country.name %></span>
+   <% else %>
+    <span>Please add..</span>
+  <% end %>
+<% else %>
+    <span>Please add..</span>
+<% end %>

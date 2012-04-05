@@ -1,0 +1,4 @@
+<select id="profile-menu">
+  <option value="0" <%= "selected=\"selected\"" if !@edit_mode %>>View Profile</option>
+  <option value="1" <%= "selected=\"selected\"" if @edit_mode %>>Edit Profile</option>
+</select>

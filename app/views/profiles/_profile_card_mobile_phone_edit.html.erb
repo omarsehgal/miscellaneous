@@ -1,0 +1,10 @@
+<h3>Mobile Phone</h3>
+<a class="save" href="">save</a>
+<%= form_for update_profile(@profile) do |f| %>
+  <%= f.fields_for :mobile_phone_contact_infos do |contact_info| %>
+    <%= contact_info.text_field :country, :size => 2 %>
+    <%= contact_info.text_field :city, :size => 5 %>
+    <%= contact_info.text_field :number, :size => 8 %>
+  <% end %>
+  <%= hidden_field_tag "profile_card", "mobile_phone" %>
+<% end %>

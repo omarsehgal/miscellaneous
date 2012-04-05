@@ -1,0 +1,14 @@
+<ul>
+ <li>Got an alternate answer? Or further information to improve this answer? Feel free to add here. Please do not use this space for providing feedback.
+  <% form_tag %>
+  <%= text_area :ans, @qid, :rows => 8, :cols => 60, :class => "new-answer", :maxlength => "1040" %><br />
+  <div id="answer-chars" class="char-countdown">max characters allowed: 1040</div>
+  <table class="answer-options">
+    <tr>
+      <td><%= link_to "Submit", "#", :name => @qid, :class => "add-answer" %></td>
+      <td><%# link_to "Hide", '#', :class => "new-answer-req", :name => @qid %></td>
+    </tr>
+  </table>
+ </li>
+</ul>
+

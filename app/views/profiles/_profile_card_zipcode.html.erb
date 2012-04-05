@@ -1,0 +1,11 @@
+<h3>Postal Code</h3>
+<a class="edit">edit</a>
+<% if @profile.location.present? %>
+  <% if @profile.location.zip_code.present? %>
+    <span><%= @profile.location.zip_code %></span>
+  <% else %>
+    <span>Please add..</span>
+  <% end %>
+<% else %>
+  <span>Please add..</span>
+<% end %>

@@ -1,0 +1,37 @@
+<script type="text/javascript">
+
+$(document).ready(function() {
+
+  $("#team_select_form").submit(function() {
+    var team_id = $('select#team_id :selected').val();
+    if(team_id == ""){
+      $('select#team_id :selected').val(0);
+    }
+  });
+
+});
+
+</script>
+
+<span class="heading-text">Category Management</span>
+
+<p>
+<% form_tag "/categories", :id => "team_select_form", :method => 'get' do %>
+  Teams: <%= collection_select(:team, :id, @teams, :id, :name, options ={:prompt => "All"}, :class => "select") %>
+  <%= submit_tag "view" %>
+<% end %>
+</p><br />
+
+<div id="show-categories">
+  <%= render 'cat_display' %>
+</div>
+
+<%= will_paginate @categories %>
+
+<br>
+<p class="page-menu">
+  <% if session[:admin].present? %>
+    <%= link_to "New Category", new_category_path %> |
+  <% end %>
+  <%= link_to 'My Categories', "/category/my_categories" %>
+</p>

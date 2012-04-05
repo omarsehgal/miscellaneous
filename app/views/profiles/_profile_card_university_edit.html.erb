@@ -1,0 +1,6 @@
+<h3>University / Degree / Year</h3>
+<a href="" class="save">save</a>
+<%= form_for @profile do |f| %>
+  <span><%= collection_select(:education, :id, @profile.educations.recent, :id, :name) %></span>
+  <%= hidden_field_tag "profile_card", "university" %>
+<% end %>

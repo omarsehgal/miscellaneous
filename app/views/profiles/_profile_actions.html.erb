@@ -1,0 +1,71 @@
+  <div id="actions" class="mlp-box">
+    <h2>Actions</h2>
+      <ul>
+
+        <li id="interested-in">
+          <div class="bug"><span></span></div>
+          <p class="interest-div">
+            <% if user_signed_in? and current_user.registered? %>
+                <% if current_user.interested?(@user) %>
+                  Remove <span>interest</span> in profile
+                <% else %>
+                  I&rsquo;m <span>interested</span> in this profile
+                <% end %>
+            <% else %>
+              I&rsquo;m <span>interested</span> in this profile
+            <% end %>
+          </p>
+        </li>
+
+        <li id="i-like">
+          <div class="bug"><span></span></div>
+          <p class="like-div">
+            <% if user_signed_in? and current_user.registered? %>
+                <% if current_user.likes?(@user) %>
+                  Remove <span>like</span>
+                <% else %>
+                  I <span>like</span> this profile
+                <% end %>
+            <% else %>
+              I <span>like</span> this profile
+            <% end %>
+          </p>
+        </li>
+
+        <li id="connect-with">
+          <div class="bug"><span></span></div>
+          <p class="connect-msg">
+            <% if user_signed_in? and current_user.registered? %>
+              <% if @is_connected %>
+                Remove <span>connection</span> with <%= @user.first_name %>
+              <% else %>
+                Connect on <span>LinkedIn</span> with <%= @user.first_name %>
+              <% end %>
+            <% else %>
+              Connect on <span>LinkedIn</span> with <%= @user.first_name %>
+            <% end %>
+          </p>
+        </li>
+
+        <li id="give-award-to">
+          <p class="award-msg">
+            <% if user_signed_in? and current_user.registered? %>
+              <% if @awarded_by_profile_visitor %>
+                Remove <span>award</span> for <%= @user.first_name %>
+              <% else %>
+                Give <span>award</span> to <%= @user.first_name %>
+              <% end %>
+            <% else %>
+              Give <span>award</span> to <%= @user.first_name %>
+            <% end %>
+          </p>
+          <div class="bug"><span></span></div>
+        </li>
+
+        <li id="send-message">
+          <p>Send a <span>message</span> to <%= @user.first_name %></p>
+          <div class="bug"><span></span></div>
+        </li>
+
+      </ul>
+  </div>

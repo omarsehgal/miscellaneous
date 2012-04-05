@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" >
+    <style type="text/css" media="screen">
+        body {font-family: calibri; font-size: 11pt}
+        div {color: gray; font-style:italic; font-size: 9pt}
+    </style>
+  </head>
+  <body>
+    <p>
+        <%= ApplicationController.helpers.raw(@announcement.content) %>
+    </p>
+    <div>
+      This announcement was sent via the iTeam Announcements page for DA (<%= link_to "http://goto/iteam", "goto/iteam" %>)
+    </div>
+  </body>
+</html>

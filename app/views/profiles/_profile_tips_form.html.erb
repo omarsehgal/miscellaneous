@@ -1,0 +1,17 @@
+<h2>Tips <span class="save">save</span></h2>
+<%= form_for update_profile(@profile) do |f| %>
+  <%= f.error_messages %>
+  <ul>
+    <% f.fields_for :profile_tips do |tip| %>
+      <%= tip.hidden_field :profile_tip_type, :value => tip.object.profile_tip_type %>
+      <div class="tip-data">
+        <p>A favorite <%= tip.object.profile_tip_type %>
+          <%= tip.collection_select(:tip_category_id, TipCategory.all, :id, :description) %>
+          tip:
+          <%= tip.text_field :content %>
+        </p>
+      </div>
+    <% end %>
+    <%= hidden_field_tag "misc_info", "tips" %>
+  </ul>
+<% end %>

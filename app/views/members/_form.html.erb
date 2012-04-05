@@ -1,0 +1,43 @@
+<%= form_for(@member) do |f| %>
+  <%= render 'shared/error_messages', :object => f.object %>
+
+  <div class="field">
+    <%= f.label :name %><br />
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :idsid %><br />
+    <%= f.text_field :idsid %>
+  </div>
+  <div class="field">
+    <%= f.label "Team" %><br />
+    <%= f.collection_select(:team_id, @teams, :id, :name, :class => "select") %>
+  </div>
+<!--  <div class="field">
+    <%= f.label :site %><br />
+    <%= f.text_field :site %>
+  </div>
+  <div class="field">
+    <%= f.label :projects %><br />
+    <%= f.text_field :projects %>
+  </div> -->
+  <div class="field">
+    <%= f.label :team_lead %><br />
+    <%= select( "member", "team_lead", { "No" => "0", "Yes" => "1"}) %>
+  </div>
+  <div class="field">
+    <%= f.label :coverage_area %><br />
+    <%= f.text_area :coverage_area, :rows => 8, :columns => 20 %>
+  </div>
+  <div class="field">
+    <%= f.label :ooo_info %><br />
+    <%= f.text_field :ooo_info %>
+  </div>
+  <div class="field">
+    <%= f.label :fav_snack %><br />
+    <%= f.text_field :fav_snack %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

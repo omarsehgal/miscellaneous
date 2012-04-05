@@ -1,0 +1,5 @@
+<h2>My Business Offers<span class="save">save</span></h2>
+<%= form_for @profile do |f| %>
+  <p><%= f.text_area :professional_interests, :rows => 0 %></p>
+  <%= hidden_field_tag "profile_tab_info", "professional_interests" %>
+<% end %>

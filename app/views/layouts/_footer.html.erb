@@ -1,0 +1,16 @@
+<footer>
+  <nav class="round">
+    <ul>
+      <li><%= link_to "Home", pages_home_path %></li>
+      <li><%= link_to "Team", members_path %></li>
+      <li><%= link_to "DADesk", '/faq/index' %></li>
+      <li><%= link_to "Links", '/links'%></li>
+      <li><%= link_to "Documents", '/documents'%></li>
+      <li><%= link_to "Announcements", announcements_path %></li>
+      <li><%= link_to "Project Access", project_users_path %></li>
+      <% if session[:admin].present? %>
+        <li><%= link_to "Monitoring", '/monitor/index' %></li>
+      <% end %>
+    </ul>
+  </nav>
+</footer>

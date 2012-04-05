@@ -1,0 +1,29 @@
+<h4>Displaying Category</h4>
+
+<p>
+  <strong>Name: </strong><%= @category.name %><br />
+  <strong>Owner: </strong><%= @category.owner %><br />
+  <strong>Team: </strong><%= @team_name %>
+</p>
+
+<strong>Questions (and answers)</strong>
+
+<ol>
+<% @category.questions.each do |question| %>
+  <li>Q: <%=h question.content %> </li>
+      <ol>
+        <% question.answers.each do |answer| %>
+          <li>A: <%=h answer.content %>
+            <ul>
+              <li><% if !answer.attachment_file_name.nil? %>Attachment: <%= link_to answer.attachment_file_name, answer.attachment.url, :target => "_blank" %><br /><% end %></li>
+            </ul>
+          </li>
+        <% end %>
+      </ol>
+<% end %>
+</ol>
+
+<p>
+  <%= link_to "Edit", edit_category_path(@category) %> |
+  <%= link_to "Back to All", categories_path %>
+</p>

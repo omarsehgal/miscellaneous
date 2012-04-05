@@ -1,0 +1,76 @@
+
+  <div class="profile-hero">
+    <div class="award-tag">
+      <span><%= @user.awards.size %></span>
+      Awards
+    </div>
+    <div id="profile-photo">
+      <img src="<%= @profile.avatar.url %>" width="96" height="93" />
+      <% if @edit_mode and @user.id == current_user.id %>
+        <a href="">change image</a>
+      <% end %>
+    </div>
+    <h2 class="name">
+      <span>
+        <%= @user.full_name %><span class="preferred"></span>
+      </span>
+    </h2>
+    <ul class="industry">
+      <a href="" class="edit"></a>
+      <% if @profile.positions.first.present? %>
+        <li name="title" class="editable"><%= @profile.positions.first.title %></li>
+        <% if @profile.positions.first.company.present? %>
+          <li name="company" class="editable"><%= @profile.positions.first.company.name %></li>
+        <% end %>
+      <% end %>
+    </ul>
+    <% if @profile.login.present? %>
+      <p><% link_to "http://#{@profile.login}.mylinkpower.com", "http://#{@profile.login}.mylinkpower.com" %></p>
+    <% end %>
+  </div>
+
+  <div class="profile-data">
+    <div id="region" class="">
+      <% if @profile.location.present? %>
+        <% if @profile.location.city.present? %>
+          <%= @profile.location.city %>
+        <% end %>
+      <% end %>
+      </span>
+    </div>
+
+    <div class="">
+        <div class="">
+            <h2>Current</h2>
+            <% if @linkedin_profile.positions.present? %>
+                <% @linkedin_profile.positions[0..2].each do |lp| %>
+                    <% if lp.is_current %>
+                      <% @work_count_card = @work_count_card - 1 %>
+                      <%= lp.title %> at <%= lp.company.name %><br />
+                    <% end %>
+                <% end %>
+            <% end %>
+        </div>
+
+        <div class="">
+            <h2>Past</h2>
+            <% if @linkedin_profile.positions.present? %>
+                <% @linkedin_profile.positions[0..2].each do |lp| %>
+                  <% if !lp.is_current %>
+                    <% @work_count_card = @work_count_card - 1 %>
+                    <%= lp.title %> at <%= lp.company.name %><br />
+                  <% end %>
+                  <% break if @work_count_card == 0 %>
+                <% end %>
+            <% end %>
+        </div>
+
+        <div class="">
+            <h2>Education</h2>
+            <% @linkedin_profile.educations[0..1].each do |lp| %>
+                <%= lp.school_name %><br />
+            <% end %>
+        </div>
+    </div>
+  </div>
+

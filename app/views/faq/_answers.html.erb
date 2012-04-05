@@ -1,0 +1,19 @@
+<ul>
+<% @answers.each do |answer| %>
+    <%# link_to image_tag('attachment.png', :border => 0), answer.attachment.url, :target => '_blank' %>
+    <li answer-id="<%= answer.id%>">
+      <span class="faint-display">answer posted: <%= answer.created_at %>, by user: <%= answer.user %></span>
+      <%= simple_format answer.content %>
+      <span class="faint-display"><% if !answer.attachment_file_name.nil? %>Attachment: <%= link_to answer.attachment_file_name, answer.attachment.url, :target => "_blank" %><br /><% end %></span>
+      <span class="ans-feedback">
+        <%= link_to image_tag('tup.png', :border => 0), "#", :class => "tup", :title => "You like this answer" %>
+        <%= link_to image_tag('tdown.png', :border => 0), "#", :class => "tdown", :title => "You don't like this answer" %>
+      </span>
+    </li>
+    <hr />
+  <% end %>
+</ul>
+<%= render 'answer_form' %>
+
+
+<!--Did this reply help? (<%= link_to 'Yes', '#', :class => "tup" %> / <%= link_to 'No', '#', :class => "tdown" %>)-->

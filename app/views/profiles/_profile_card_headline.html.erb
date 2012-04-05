@@ -1,0 +1,7 @@
+<h3>Professional &ldquo;Headline&rdquo;</h3>
+<a class="edit">edit</a>
+<% if @profile.headline.present? %>
+  <span><%= @profile.headline %></span>
+<% else %>
+  <span>Please add..</span>
+<% end %>

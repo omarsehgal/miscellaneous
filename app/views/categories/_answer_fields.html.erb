@@ -1,0 +1,8 @@
+<p class="fields">
+  <%= f.label :content, "Answer" %> (<%= link_to_remove_fields "delete", f %>)<br />
+  <%= f.text_area :content, :rows => 8, :cols => 80 %><br />
+  <%# f.cktext_area :content, :toolbar=>'Basic' %>
+  <%= f.hidden_field :user, :value => get_owner(f.object.user) %>
+  <%= f.label :attachment, "Attachment" %>
+  <%= f.file_field :attachment %><br />
+</p>

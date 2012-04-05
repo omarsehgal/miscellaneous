@@ -1,0 +1,9 @@
+<h3>Business Phone</h3>
+<a class="edit">edit</a>
+<% if @profile.business_phone_contact_infos.present? %>
+  <% if @profile.business_phone_contact_infos.present? %>
+    <span>+<span class="phone"><%= @profile.business_phone_contact_infos.first.to_international_format %></span></span>
+  <% end %>
+<% else %>
+    <span>Please add..</span>
+<% end %>

@@ -1,0 +1,10 @@
+<h2>
+  PERSONAL INTERESTS (hobbies, travel, etc)
+  <span class="save">save</span>
+</h2>
+<%= form_for @profile do |f| %>
+  <p><%= f.text_area :personal_interests, :rows => 0 %></p>
+  <%= hidden_field_tag "profile_tab_info", "personal_interests" %>
+<% end %>
+
+

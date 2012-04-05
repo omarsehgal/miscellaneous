@@ -1,0 +1,7 @@
+<h3>Industry</h3>
+<a class="edit">edit</a>
+<% if @profile.primary_industry.present? %>
+  <span name="industry"><%= @profile.primary_industry.name %></span>
+<% else %>
+  <span name="industry"></span>
+<% end %>

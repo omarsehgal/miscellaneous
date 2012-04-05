@@ -1,0 +1,6 @@
+<h2>I&rsquo;m Looking For<span class="edit">edit</span></h2>
+<% if @profile.looking_for.present? %>
+  <p><%= @profile.looking_for %></p>
+<% else %>
+  <p>Please add..</p>
+<% end %>

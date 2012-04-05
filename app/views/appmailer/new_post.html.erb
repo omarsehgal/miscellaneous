@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" >
+    <style type="text/css" media="screen">
+        body {font-family: calibri; font-size: 11pt}
+        div {color: gray; font-style:italic; font-size: 9pt}
+    </style>
+  </head>
+  <body>
+    <div>
+      This is an automatic response, please do not reply.
+    </div>
+    <p>Just wanted to let you know that user <%= @user %> has added the following post under the category <%= @category_name %></p>
+    <p>
+      <%= @post %>
+    </p>
+    <div>
+      This was sent via (<%= link_to "http://goto/iteam", "goto/iteam" %>)
+    </div>
+  </body>
+</html>
+
+

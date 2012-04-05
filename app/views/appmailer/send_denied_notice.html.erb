@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" >
+    <style type="text/css" media="screen">
+        body {font-family: calibri; font-size: 11pt}
+        div {color: gray; font-style:italic; font-size: 9pt}
+    </style>
+  </head>
+  <body>
+    <div>
+      This is an automatic response, please do not reply.
+    </div>
+    <p>
+        Dear <%= get_email_name(@project_user.name) %>,<br/><br/>
+        Your request to join <%= @project_user.project %> has been denied by <%= get_full_name(@denier_idsid) %> for one or more reasons listed:<br/><br/>
+
+        <ul>
+          <li>Incorrect Project and/or Team</li>
+          <li>Insufficient Justification</li>
+          <% if !@project_user.user_type.eql?"Member" %>
+          <li>Incorrect Sponsor Manager</li>
+          <%end%>
+        </ul>
+
+        To submit a new request, visit <%= link_to "Project Access Request", "http://scyweb05.sc.intel.com:3005/project_users" %><br/><br/>
+
+        Sincerely,<br/>
+        DA-iTeam<br/>
+    </p>
+    <div>
+      This was sent via Project Access Request (<%= link_to "http://goto/iteam", "goto/iteam" %>)
+    </div>
+  </body>
+</html>

@@ -1,0 +1,21 @@
+<span class="heading-text">Team Management</span>
+ <br/><br/>
+<table class="table-display">
+  <tr>
+    <th>Team Name</th>
+    <th>Team Admin</th>
+    <th colspan="3">Admin Options</th>
+  </tr>
+  <% for team in @teams %>
+    <tr>
+      <td><%= team.name %></td>
+      <td><%= team.admin %></td>
+      <% if team.admin.eql?(session[:idsid]) %>
+        <td><%= link_to "Edit", edit_team_path(team) %></td>
+        <td><%= button_to "Destroy", team, {:onclick => "return confirm('Are you sure?')", :method => :delete} %></td>
+      <% end %>
+    </tr>
+  <% end %>
+</table>
+
+<p><%= link_to "New Team", new_team_path %></p>

@@ -1,0 +1,26 @@
+<%= stylesheet_link_tag 'profile-create' %>
+<h2>Personal Information<span class="save" href="">save</span></h2>
+<%= form_for @profile do |f| %>
+  <%= f.error_messages %>
+        <div class="birthday">
+          <p>Birthday</p>
+          <div>
+            <%= text_field :user, :birth_month, :class => "month", :value => current_user.birthday.month, :size => 2 %>
+            <p>Month</p>
+          </div>
+          <div>
+            <%= text_field :user, :birth_day, :class => "day", :value => current_user.birthday.day, :size => 2 %>
+            <p>Day</p>
+          </div>
+          <div>
+            <%= text_field :user, :birth_year, :class => "year", :value => current_user.birthday.year, :size => 4 %>
+            <p>Year</p>
+          </div>
+        </div>
+  <p>Gender: <%= select :user, :gender, {"Male" => "male", "Female" => "female"}, :selected => current_user.gender %></p>
+  <p>Hometown<%= f.text_field :hometown %></p>
+  <%= hidden_field_tag "misc_info", "personal_info" %>
+<% end %>
+
+
+

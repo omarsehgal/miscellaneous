@@ -1,0 +1,29 @@
+<span class="heading-text"><%= team_name %> team members</span><br />
+<table class="table-display">
+  <tr>
+    <th>Name</th>
+    <th>idsid</th>
+    <th>Coverage area</th>
+    <th>OOO</th>
+    <% if session[:admin].present? %>
+        <th></th>
+        <th></th>
+    <% end %>
+  </tr>
+
+<% all.each do |member| %>
+  <tr>
+    <td>
+      <% if member.team_lead.to_i == 1 %> <%= image_tag("asterix.png", :alt => "Sample App", :class => "round") %><% end %><%= member.name %>
+    </td>
+    <td><%= member.idsid %></td>
+    <td><%= member.coverage_area %></td>
+    <td><%= member.ooo_info %></td>
+
+    <% if session[:admin].present? or session[:idsid].eql?@team.admin %>
+      <td><%= link_to 'Edit', edit_member_path(member)  %></td>
+      <td><%= button_to 'Delete', member, {:onclick => "return confirm('Are you sure?')", :method => :delete} %></td>
+    <% end %>
+  </tr>
+<% end %>
+</table>

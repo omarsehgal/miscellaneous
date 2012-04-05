@@ -1,0 +1,39 @@
+<% if @questions.count == 0 %>
+    <div class="no-results">No matching results were found</div>
+<% else %>
+    <% @questions.each do |question| %>
+        <span class="heading-text"><%= question.content %></span>
+
+        <% if question.answers.count > 0 %>
+          (<%= link_to pluralize(question.answers.count, 'answer'), "#", :class => "show-answers", :qid => question.id %>)
+        <% else %>
+          <span class="answer-count">(<%= pluralize(question.answers.count, 'answer') %>)</span>
+        <% end %>
+
+        <% # you never want to do this in a view but there was no other way %>
+        <% question.answers.each do |a| %>
+          <% if !a.attachment_file_name.nil? %>
+            <%= image_tag("attachment.png", :alt => "attachments", :title => "answers have attachments") %>
+            <% break %>
+          <% end %>
+        <% end %>
+        <% if !Category.find_by_id(@category_id).nil? %>
+          <% if Category.find_by_id(@category_id).has_owner?(session[:idsid]) %>
+            <%= link_to image_tag("edit-icon.png", :alt => "edit", :title => "edit question"), edit_category_path(@category_id) %>
+            <%= link_to image_tag("change.jpg", :alt => "change-parent", :title => "change team/category of question"), '#', :class => "change-parent", :id => question.id %>
+          <% end %>
+        <% end %>
+        <%= link_to image_tag("link.png", :alt => "link", :title => "send someone a link to this question"), "#", :id => question.id, :class => "show-link" %>
+        <% if question.answers.count == 0 %>
+          <span><%= link_to "+a", '#', :class => "new-answer-req", :name => question.id %></span>
+        <% end %>
+        <div id="link-div_<%= question.id %>" class="link-div" style="display: none;"></div>
+        <div class="faint-display">
+          discussion posted: <%= question.created_at.strftime("%m-%d-%Y") %>, category: <%=h Category.find_by_id(question.category_id).name %>
+            , team: <%=h Team.find_by_id(Category.find_by_id(question.category_id).team_id).name %>, posted by: <%= question.user %>
+        </div>
+        <div id="answer_<%= question.id %>" class="answers"></div><br />
+    <% end %>
+
+    <%# will_paginate @questions %>
+<% end %>

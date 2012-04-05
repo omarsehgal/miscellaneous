@@ -1,0 +1,75 @@
+<div class="work-history-limited">
+
+  <% if !@profile.summary.nil? && !@profile.summary.empty? %>
+    <div class="mlp-box">
+      <h2>Summary</h2>
+      <span class="edit">edit</span>
+      <p>
+        <%= @profile.summary %>
+      </p>
+    </div>
+  <% end %>
+
+  <% if !@profile.positions.current.empty? %>
+    <div class="mlp-box current-experience">
+      <h2>Current Experience</h2>
+      <span class="edit">edit</span>
+      <% @profile.positions.current.each do |curr| %>
+        <ul>
+          <li>
+            <h3><%= curr.title %></h3>
+            <h4><%= curr.company.name %></h4>
+            <p class="date">
+              <% if curr.start_date.present? %>
+                <%= curr.start_date %> &ndash; Present (<%= distance_of_time_in_words(curr.start_date, Time.now) %>)
+              <% end %>
+            </p>
+            <p class="description"><%= curr.summary %></p>
+          </li>
+        </ul>
+      <% end %>
+    </div>
+  <% end %>
+
+  <% if !@profile.positions.past.empty? %>
+    <div class="mlp-box current-experience">
+      <h2>Past Experience</h2>
+      <span class="edit">edit</span>
+      <% @profile.positions.past.each do |past| %>
+        <ul>
+          <li>
+            <h3><%= past.title %></h3>
+            <h4><%= past.company.name %></h4>
+            <p class="date">
+              <% if past.start_date.present? and past.end_date.present? %>
+                <%= past.start_date %> &ndash; <%= past.start_date %> (<%= distance_of_time_in_words(past.start_date, past.end_date) %>)
+              <% end %>
+            </p>
+            <p class="description"><%= past.summary %></p>
+          </li>
+        </ul>
+      <% end %>
+    </div>
+  <% end %>
+
+  <% if !@profile.educations.empty? %>
+    <div class="mlp-box">
+      <h2>Education</h2>
+      <span class="edit">edit</span>
+      <% @profile.educations.each do |edu| %>
+        <ul>
+          <li>
+            <h3><%= edu.school.name %></h3>
+            <h4><%= edu.degree %></h4>
+            <p class="date">
+              <% if edu.start_date.present? and edu.end_date.present? %>
+                <%= edu.start_date %> &ndash; <%= edu.start_date %> (<%= distance_of_time_in_words(edu.start_date, edu.end_date) %>)
+              <% end %>
+            </p>
+          </li>
+        </ul>
+      <% end %>
+    </div>
+  <% end %>
+
+</div>

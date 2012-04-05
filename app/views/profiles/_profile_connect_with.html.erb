@@ -1,0 +1,61 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US" xml:lang="en-US">
+
+  <head>
+    <title>myLinkpower</title>
+
+    <link rel="stylesheet" type="text/css" href="/stylesheets/mlp-base.css" />
+    <!--[if IE]>
+    <link rel="stylesheet" type="text/css" href="stylesheets/mlp-ie.css" />
+    <![endif]-->
+
+    <script>
+    $(document).ready(function() {
+
+      $(".connect.mlp-button").live("click", function() {
+        var sub = $('#subject').attr('value');
+        var body = $('#message').attr('value');
+        var to = $(this).parent().attr("user_id");
+
+        //alert(to + "," + sub + "," + body);
+        bValid = true;
+
+        if(bValid) {
+          $.get("/send_connect_request?to=" + to + "&subject=" + sub + "&body=" + body, function(){
+            alert("Your connection request has been sent");
+            $.colorbox.close()
+          });
+        }
+        return false;
+      });
+    });
+
+    </script>
+  </head>
+
+  <body id="awards">
+    <div class="overlay"></div>
+    <div class="message-box mlp-box">
+      <% if @connect_for_award %>
+        <h2 class="grad1">You can only give awards to your connections on LinkedIn. Invite <%= @user.first_name %> to connect on LinkedIn</h2>
+      <% else %>
+        <h2 class="grad1">Connection request</h2>
+      <% end %>
+      <div id="connect-form" title="Connect with <%= @user.first_name %>" user_id="<%= @user.id %>">
+        <%= form_tag("/send_connection_request", :id => "connect-form") do %>
+          <p>
+            <%= label_tag(:s, "Subject:") %>
+            <%= text_field_tag("subject", "Invitation to connect", :disabled => true) %>
+          </p>
+          <p>
+            <%= label_tag(:m, "Message:") %>
+            <%= text_area_tag("message", "I saw your profile on mylinkpower and wanted to add you as a LinkedIn connection", :rows => 4, :cols => 22) %>
+          </p>
+        <% end %>
+        <span class="connect mlp-button"><%= submit_tag 'Send Connection Request' %></span>
+      </div>
+
+    </div>
+  </body>
+</html>
+

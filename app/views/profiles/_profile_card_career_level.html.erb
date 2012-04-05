@@ -1,0 +1,12 @@
+<h3>Career Level</h3>
+<a class="edit">edit</a>
+<% if @profile.positions.default.present? %>
+  <% if @profile.positions.default.first.job_level.present? %>
+    <span><%= @profile.positions.default.first.job_level.name %></span>
+  <% else %>
+    <span>Please add..</span>
+  <% end %>
+<% else %>
+  <span>Please add..</span>
+<% end %>
+</span>

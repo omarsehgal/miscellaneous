@@ -1,0 +1,8 @@
+<h3>Professional &ldquo;Headline&rdquo;</h3>
+<a class="save" href="">save</a>
+<%= form_for @profile do |f| %>
+  <%# f.fields_for :positions do |position| %>
+    <%= collection_select(:position, :size, CompanySize.all, :id, :name, {:selected => @profile.positions.default.first.company_size.id}) %>
+  <%# end %>
+  <%= hidden_field_tag "profile_card", "company_size" %>
+<% end %>

@@ -1,0 +1,27 @@
+<h3>University</h3>
+<a class="edit">edit</a>
+<% if @profile.educations.default.present? %>
+  <% if @profile.educations.default.first.school.present? %>
+    <%= @profile.educations.default.first.school.name %>
+  <% end %>
+<% else %>
+    <span>Please add..</span>
+<% end %>
+
+<div id="degree" class="c2 medium">
+  <h3>Degree</h3>
+  <% if @profile.educations.default.present? %>
+    <% if @profile.educations.default.first.degree.present? %>
+      <span><%= @profile.educations.default.first.degree %></span>
+    <% end %>
+  <% end %>
+</div>
+
+<div id="year" class="c2 small">
+  <h3>Year</h3>
+  <% if @profile.educations.default.present? %>
+    <% if @profile.educations.default.first.end_date.present? %>
+      <span><%= @profile.educations.default.first.end_date.year %></span>
+    <% end %>
+  <% end %>
+</div>

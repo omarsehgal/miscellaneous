@@ -1,0 +1,113 @@
+<div class="work-history-limited">
+  <div class="mlp-box">
+    <h2>Summary</h2>
+    <p>
+      <% if @linkedin_profile.present? %>
+        <%= @linkedin_profile.summary %>
+      <% end %>
+    </p>
+  </div>
+  <div class="mlp-box current-experience">
+    <h2>Current Experience</h2>
+    <% if @linkedin_profile.positions.present? %>
+      <% @linkedin_profile.positions[0..2].each do |lp| %>
+        <ul>
+          <% if lp.is_current %>
+            <% @work_count = @work_count - 1 %>
+            <li>
+              <h3>
+                <% if lp.title.present? %>
+                  <%= lp.title %>
+                <% end %>
+              </h3>
+              <h4>
+                                  <% if lp.company.name.present? %>
+                                    <%= lp.company.name %>
+                                  <% end %>
+                                </h4>
+                                <p class="date">
+                                  <% if lp.start_date_year.present? %>
+                                    <%= lp.start_date_year %> &ndash; Present
+                                  <% end %>
+                                  <% if lp.start_date_year.present? && lp.start_date_month.present? %>
+                                    (<%= distance_of_time_in_words(Date.new(lp.start_date_year, lp.start_date_month), Time.now) %>)
+                                  <% end %>
+                                </p>
+                                <p class="description"><%= lp.summary %></p>
+                            </li>
+                          <% end %>
+                    </ul>
+                <% end %>
+            <% end %>
+        </div>
+
+        <div class="mlp-box">
+            <h2>Past Experience</h2>
+            <% if @linkedin_profile.positions.present? %>
+                <% @linkedin_profile.positions[0..2].each do |lp| %>
+                    <ul>
+                        <% if !lp.is_current %>
+                          <% @work_count = @work_count - 1 %>
+                            <li>
+                                <h3>
+                                  <% if lp.title.present? %>
+                                    <%= lp.title %>
+                                  <% end %>
+                                </h3>
+                                <h4>
+                                  <% if lp.company.name.present? %>
+                                    <%= lp.company.name %>
+                                  <% end %>
+                                </h4>
+                                <p class="date">
+                                  <% if lp.start_date_year.present? %>
+                                    <%= lp.start_date_year %> &ndash;
+                                  <% end %>
+                                  <% if lp.end_date_year.present? %>
+                                    <%= lp.end_date_year %>
+                                  <% end %>
+                                  <% if lp.start_date_year.present? && lp.start_date_month.present? && lp.end_date_year.present? && lp.end_date_month.present? %>
+                                    (<%= distance_of_time_in_words(Date.new(lp.start_date_year, lp.start_date_month), Date.new(lp.end_date_year, lp.end_date_month)) %>)
+                                  <% end %>
+                                </p>
+                            </li>
+                          <% end %>
+                    </ul>
+                  <% break if @work_count == 0 %>
+                <% end %>
+            <% end %>
+        </div>
+
+        <div class="mlp-box">
+            <h2>Education</h2>
+            <% @linkedin_profile.educations[0..1].each do |lp| %>
+                <ul>
+                    <li>
+                        <h3>
+                            <% if lp.school_name.present? %>
+                                <%= lp.school_name %>
+                            <% end %>
+                        </h3>
+                        <h4>
+                            <% if lp.degree.present? %>
+                              <%= lp.degree %>,
+                            <% end %>
+                            <% if lp.field_of_study.present? %>
+                              <%= lp.field_of_study %>
+                            <% end %>
+                        </h4>
+                        <p class="date">
+                          <% if lp.start_date_year.present? %>
+                            <%= lp.start_date_year %>
+                          <% end %>
+                          &ndash;
+                          <% if lp.end_date_year.present? %>
+                            <%= lp.end_date_year %>
+                          <% end %>
+                        </p>
+                    </li>
+                </ul>
+            <% end %>
+        </div>
+    </div>
+

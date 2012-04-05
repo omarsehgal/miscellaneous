@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" >
+    <style type="text/css" media="screen">
+        body {font-family: calibri; font-size: 11pt}
+        div {color: gray; font-style:italic; font-size: 9pt}
+    </style>
+  </head>
+  <body>
+    <div>
+      This is an automatic response, please do not reply <br/>
+    </div>
+    <p>
+        Dear <%= get_email_name(@project_user.name) %>,<br/><br/>
+
+        We have completed your request to join <%= @project_user.project %>.<br/><br/>
+
+        <% if @project_user.user_type.eql?"Member" %>
+          You have received access to the following:<br/>
+            <ul>
+              <li>General Group Permission:
+              <% if @project_user.project.eql?"SKX" %> skxall, mpgall, mpgdsgn
+                <% else %> mpgall, mpgdsgn, gsrall, jktall, jktdsgn
+                <% end %>
+              </li>
+              <li>CSD Pool Access</li>
+              <li>GWA Setup Access</li>
+            </ul>
+        <% else %>
+            You have received access to the following:<br/>
+            <ul>
+              <li>General Group Permission:
+                <% if @project_user.project.eql?"SKX" %> skxall, mpgall, mpgdsgn
+                <% else %> mpgall, mpgdsgn, gsrall, jktall, jktdsgn
+                <% end %>
+
+              </li>
+
+            </ul>
+            For computing resources (machines and disks), please consult with your sponsor manager.<br/><br/>
+        <% end %>
+
+        <% if @project_user.project.eql?"SKX" %>
+            For specialized group permissions (skx_rtl, cpu1272_upf), and setup completion, please follow the <%= link_to "Project Setup Checklist","http://scyweb05.sc.intel.com:3005/system/attachments/14/original/SKX_ENVIRONMENT_SETUP_CHECKLIST.pdf"%>. <br/><br/>
+        <% else %>
+            To complete your setup, please follow the <%= link_to "Project Setup Checklist", "http://scyweb05.sc.intel.com:3005/system/attachments/20/original/Project_Setup_Checklist.pdf" %> <br/><br/>
+        <% end %>
+        Sincerely,<br/>
+        DA-iTeam
+    </p>
+    <div>
+      This was sent via Project Access Request (<%= link_to "http://goto/iteam", "goto/iteam" %>)
+    </div>
+  </body>
+</html>

@@ -1,0 +1,26 @@
+<h2>Languages <span class="edit">edit</span></h2>
+<ul>
+  <% if @profile.full_profile_at.nil? %>
+    <% @linkedin_profile.languages.split(/,/).each do |item| %>
+      <li>
+        <blockquote>
+          <p><%= item %></p>
+        </blockquote>
+      </li>
+    <% end %>
+  <% else %>
+      <% if @profile.profile_languages.count == 0 %>
+        <li>
+          <blockquote><p>Please add..</p></blockquote>
+        </li>
+      <% else %>
+        <% @profile.profile_languages.each do |pl| %>
+          <li>
+            <blockquote>
+             <p><%= pl.name %></p>
+            </blockquote>
+          </li>
+        <% end %>
+      <% end %>
+  <% end %>
+</ul>

@@ -1,0 +1,6 @@
+<h2>I am offering for free<span class="edit">edit</span></h2>
+<% if @profile.offering.present? %>
+  <p><%= @profile.offering %></p>
+<% else %>
+  <p>Please add..</p>
+<% end %>

@@ -1,0 +1,6 @@
+<h3>Professional &ldquo;Headline&rdquo;</h3>
+<a class="save" href="">save</a>
+<%= form_for @profile do |f| %>
+  <%= f.text_field :headline, :value => @profile.headline %>
+  <%= hidden_field_tag "profile_card", "headline" %>
+<% end %>

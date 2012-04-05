@@ -1,0 +1,523 @@
+<% if @own_view or @own_view_in_view_mode %>
+  <% renders "profile" %>
+<% end %>
+
+<% content_for :javascripts do %>
+  <%= javascript_include_tag 'jquery.colorbox.js' %>
+  <%= javascript_include_tag 'jquery.imgareaselect.pack.js' %>
+  <%= javascript_include_tag 'jquery.blockui.js' %>
+<% end %>
+
+<% content_for :stylesheets do %>
+  <%= stylesheet_link_tag 'profile' %>
+  <%= stylesheet_link_tag 'colorbox.css' %>
+  <%= stylesheet_link_tag 'upload-photo.css' %>
+  <%= stylesheet_link_tag 'imgareaselect-default.css' %>
+  <%# stylesheet_link_tag 'awards-receive.css' %>
+<% end %>
+
+<% if @profile.full_profile_at.present? %>
+    <% if @edit_mode %>
+        <% content_for :stylesheets do %>
+            <%= stylesheet_link_tag 'profile-edit' %>
+        <% end %>
+    <% end %>
+<% else %>
+    <% content_for :stylesheets do %>
+        <%= stylesheet_link_tag 'profile-limited' %>
+    <% end %>
+    <!-- source profile edit only if user is viewing own limited profile -->
+    <% if @own_view %>
+        <%= stylesheet_link_tag 'profile-edit' %>
+    <% end %>
+<% end %>
+
+<script type="text/javascript">
+
+	$('img.awards_cluetip').cluetip({
+	    showTitle: false,
+  	    width:   200,
+  	    local:false,
+  	    topOffset:   15,
+        arrows: true,
+        dropShadow: false,
+        hoverIntent: false,
+        sticky: true,
+        showTitle: true,
+        mouseOutClose: false,
+        closePosition: 'title',
+        cluetipClass: 'rounded',
+        positionBy: 'mouse',
+        closeText: '<img src="/images/closelabel.png" alt="close" />',
+    });
+
+    $('img.award_cluetip').cluetip({
+	    showTitle: false,
+  	    width:   270,
+  	    local:true,
+  	    topOffset:   15,
+        arrows: true,
+        dropShadow: false,
+        hoverIntent: false,
+        sticky: false,
+        showTitle: true,
+        mouseOutClose: true,
+        closePosition: 'title',
+        cluetipClass: 'rounded',
+        positionBy: 'mouse',
+        closeText: '<img src="/images/closelabel.png" alt="close" />',
+    });
+
+    $(document).ready(function() {
+
+      // need a variable to make sure user does not open two edit forms on the profile edit page
+      var edit_form = 0;
+      var edit_form_name;
+      var status_txt = "Post an update. Click anywhere outside to save.";
+
+      // if the update field is blank, prompt user to update
+      if($("#profile_status_update").val() == ""){
+        $("#profile_status_update").val(status_txt);
+      }
+
+      // activate when user wants to change profile page image
+      $("#upload-avatar").colorbox({href: "/upload_avatar"});
+
+      // if the user does not have a full profile, don't show the profile view/edit dropdown
+      <% if current_user.present? && @profile.full_profile_at.present? %>
+        $('li#profile-menu-holder').html("<%= escape_javascript(render(:partial => 'profiles/profile_menu')) %>");
+      <% end %>
+
+      $('#profile-menu').change(function() {
+        var choice = $('select#profile-menu :selected').val();
+        $(location).attr('href','/profiles/<%= @profile.id %>?pm=' + choice);
+      });
+
+      // in profile view mode disable the edit links by removing the edit class
+      <% if !@edit_mode %>
+        $('span.edit').html("");
+        $('a.edit').html("");
+      <% end %>
+
+      // if the user has a limited profile, display the limited profile when on the profile page and all edit
+      // links on fields should link to the create profile page. we want the user to first create a full profile
+      <% if @profile.full_profile_at.nil? %>
+          $("a.edit").live("click", function() {
+            window.location.href = "/profiles/new";
+          });
+          $("span.edit").live("click", function() {
+            window.location.href = "/profiles/new";
+          });
+          $("#profile_status_update").live("focus", function(){
+            alert("Please complete your profile for using this feature");
+          });
+      <% else %>
+
+          // if status is left empty, fill in prompt again
+          $("#profile_status_update").live("blur", function(){
+            pageBlock();
+            $.ajax({type:'POST', url: '/profiles/<%= @profile.id %>', data:$('.status-update').serialize(), success: function(data) {
+              pageUnblock();
+              if ($("#profile_status_update").val() == ""){
+                $("#profile_status_update").val(status_txt);
+              }
+              $("#chars-remain").html("");
+            }});
+          });
+
+          // show countdown when user updates status
+          $('#profile_status_update').live("keyup", (function(){
+            var max = parseInt($(this).attr('maxlength'));
+            if($(this).val().length > max){
+              $(this).val($(this).val().substr(0, $(this).attr('maxlength')));
+            }
+            $('#chars-remain').html((max - $(this).val().length));
+          }));
+
+          // triggered when a user wants to edit his tips, certifications, languages,
+          // skills, specialties, associations, or media links
+          $("div#misc_info span.edit").live("click", function() {
+            var type = $(this).parent().parent().attr("name");
+            if(!edit_form){
+                edit_form = 1;
+                edit_form_name = $(this).parent().parent().attr("name");
+            }
+            else {
+                alert("Please complete editing " + edit_form_name + " before editing other fields")
+                return false;
+            }
+            pageBlock();
+            $.post("/profiles/refresh_data?type=" + type, function(data){
+                pageUnblock();
+                $('div.'+type).html(data);
+            })
+            return false;
+          });
+
+          // triggered when a user wants to save his certifications, languages,
+          // skills, specialities, or associations, media
+          $("div#misc_info span.save").live("click", function() {
+            var type = $(this).parent().parent().attr("name");
+            pageBlock();
+            $.ajax({type:'POST', url: '/profiles/<%= @profile.id %>', data:$('.edit_profile').serialize(), success: function(data) {
+                pageUnblock();
+                $('div.'+type).html(data);
+                if(edit_form){
+                    edit_form = 0;
+                    edit_form_name = "";
+                }
+            }});
+            return false;
+          });
+
+          // triggered if the user wants to edit the profile card, show the card field in edit mode
+          //$("div.profile-data a.edit").live("click", function() {
+          $("a.edit").live("click", function() {
+            var type = $(this).parent().attr("id");
+            pageBlock();
+            $.post("/profiles/refresh_card_data?type=" + type, function(data){
+                pageUnblock();
+                $("div#" + type).html(data);
+            })
+            return false;
+          });
+
+          // triggered if the user wants to save the profile card, show the card in view mode
+          //$("div.profile-data a.save").live("click", function() {
+          $("a.save").live("click", function() {
+            var type = $(this).parent().attr("id");
+            pageBlock();
+            $.ajax({type:'POST', url: '/profiles/<%= @profile.id %>', data:$('.edit_profile').serialize(), success: function(data) {
+                pageUnblock();
+                $("div#" + type).html(data);
+            }});
+            return false;
+          });
+
+          // triggered if the user wants to edit the about me tab of the profile tabs
+          $("div.about-me-tab span.edit").live("click", function() {
+            var type = $(this).parent().parent().attr("id");
+            pageBlock();
+            $.post("/profiles/refresh_tabs_data?type=" + type, function(data){
+                pageUnblock();
+                $("div#" + type).html(data);
+            })
+            return false;
+          });
+
+          // triggered if the user wants to save the profile card, show the card in view mode
+          $("div.about-me-tab span.save").live("click", function() {
+            var type = $(this).parent().parent().attr("id");
+            pageBlock();
+            $.ajax({type:'POST', url: '/profiles/<%= @profile.id %>', data:$('.edit_profile').serialize(), success: function(data) {
+                pageUnblock();
+                $("div#" + type).html(data);
+            }});
+            return false;
+          });
+
+      <% end %>
+
+      function selfActionCheck(){
+        <% if @own_view or @own_view_in_view_mode %>
+          return false;
+        <% else %>
+          return true;
+        <% end %>
+      }
+
+      $("#interested-in").live("click", function() {
+        <% unless user_signed_in? and current_user.registered? %>
+          alert("You must be a registered member to use this feature");
+          return false;
+        <% end %>
+        if(!selfActionCheck()){
+            alert("When you show interest in a profile, the recipient is notified, but nobody except the two of you will know");
+            return false;
+        }
+        var self = $(this);
+        var user_id = "<%= @user.id %>";
+        pageBlock();
+        $.post("/profiles/change_interest?id=" + user_id, function(data){
+          pageUnblock();
+          $("p.interest-div").html(data);
+        })
+      });
+
+      $("#i-like").live("click", function() {
+        <% unless user_signed_in? and current_user.registered? %>
+          alert("You must be a registered member to use this feature");
+          return false;
+        <% end %>
+        if(!selfActionCheck()){
+            alert("When you like a profile, the recipient is notified and others can see that you like the profile");
+            return false;
+        }
+        var self = $(this);
+        var user_id = "<%= @user.id %>";
+        pageBlock();
+        $.post("/profiles/change_like?id=" + user_id, function(data){
+          pageUnblock();
+          $("p.like-div").html(data);
+        })
+      });
+
+      // action when a user clicks on the connect with button
+      $("#connect-with").click(function() {
+        <% unless user_signed_in? and current_user.registered? %>
+          alert("You must be a registered member to use this feature");
+          return false;
+        <% end %>
+        if(!selfActionCheck()){
+            alert("What, you want to connect with yourself??");
+            return false;
+        }
+        var self = $(this);
+        var user_id = "<%= @user.id %>";
+
+        <% if @is_connected %>
+          window.open("http://www.linkedin.com/connections?displayBreakConnections=");
+        <% else %>
+          $("#connect-with").colorbox({href: "/show_connect_form?uid=" + user_id, onClosed:function(){
+            $("p.connect-msg").html("Remove <span>connection</span> with <%= @user.first_name %>");
+          }});
+        <% end %>
+      });
+
+      // send award action
+      $("#give-award-to").click(function() {
+        <% unless user_signed_in? and current_user.registered? %>
+          alert("You must be a registered member to use this feature");
+          return false;
+        <% end %>
+        if(!selfActionCheck()){
+            alert("Nice try, but you can’t give yourself an award ;)");
+            return false;
+        }
+        var self = $(this);
+        var user_id = "<%= @user.id %>";
+
+        <% if @awarded_by_profile_visitor %>
+          window.open("http://www.blinkup.com/withdraw_award?user_id=" + user_id);
+          $(".award-msg").html("Give <span>award</span> to <%= @user.first_name %>");
+        <% else %>
+          <% if @is_connected %>
+            $("#give-award-to").colorbox({href: "/select_award?uid=<%= @user.authentications.first.uid %>"});
+          <% else %>
+            $("#give-award-to").colorbox({href: "/show_connect_form?uid=" + user_id + "&award=true"});
+          <% end %>
+        <% end %>
+      });
+
+      // send message action
+      $("#send-message").click(function() {
+        <% unless user_signed_in? and current_user.registered? %>
+          alert("You must be a registered member to use this feature");
+          return false;
+        <% end %>
+        if(!selfActionCheck()){
+            alert("You cannot take actions on your own profile");
+            return false;
+        }
+        var self = $(this);
+        var user_id = self.parent().attr("user_id");
+        var my_id = self.parent().attr("my_id");
+        $("#send-message").colorbox({href: "/show_message_form?to_uid=<%= @user.id %>"});
+      });
+
+      $(".tab").live("click", function() {
+        $(".tabs").children().each(function(){
+            $(this).removeClass("active");
+        });
+        $(this).parent().addClass("active");
+      });
+
+    });
+
+</script>
+
+<div class="col-body">
+
+  <% if @own_view %>
+      <% if !@profile.full_profile_at.present? %>
+          <div id="limited-message">
+            <a href="/profiles/new" class="limited-msg-btn"></a>
+            <p class="msg">Your curent profile is limited to what you see here, and many members will only be able to see your name, headline and photo.</p>
+            <p class="cta">Create a complete networking profile <span>in less than 2 minutes!</span></p>
+          </div>
+      <% end %>
+  <% end %>
+
+  <!-- BEGIN: Profile Card -->
+  <div id="profile-card" class="mlp-box">
+    <% if !@own_view and @profile.full_profile_at.nil? %>
+      <%= render :partial => "profile_card_limited_otherview" %>
+    <% else %>
+      <%= render :partial => "profile_card" %>
+    <% end %>
+  </div>
+  <!-- END: Profile Card -->
+
+  <!-- BEGIN: Left Side Bar -->
+  <div class="col-sidebar">
+
+    <!-- if user is viewing own limited profile, show recommendations in this section (not actions) -->
+    <% if @profile.full_profile_at.nil? and @own_view %>
+      <% unless @award_transactions.empty? %>
+        <%= render :partial => 'profile_recommendations' %>
+      <% end %>
+    <% else %>
+      <!-- don't show profile actions if user is viewing own profile in edit mode -->
+      <% unless @own_view and @edit_mode %>
+        <!-- Begin: Actions -->
+        <%= render :partial => 'profile_actions' %>
+        <!-- End: Actions -->
+      <% end %>
+    <% end %>
+
+    <!-- this left section should only appear if viewing the profile (full/limited) of another person -->
+    <!-- if viewing own limited profile, none of this should show -->
+    <% unless @own_view and @profile.full_profile_at.nil? %>
+
+        <!-- if you're viewing someone else's limited profile, personal info should appear here -->
+        <% if !@own_view and @profile.full_profile_at.nil? %>
+          <!-- Begin: Personal Interests -->
+          <!-- user is viewing someone else's limited profile..make sure there are interests available from LI -->
+          <%# unless @linkedin_profile.interests.empty? %>
+          <% unless !@own_view and ((@profile.full_profile_at.present? and @profile.personal_interests.empty?) or (@profile.full_profile_at.nil? and @linkedin_profile.interests.empty?))%>
+            <div class="mlp-box">
+              <%= render :partial => 'profile_personal_interests' %>
+            </div>
+          <% end %>
+          <!-- End: Personal Interests -->
+        <% else %>
+          <!-- Begin: Tips -->
+          <div class="mlp-box tips" id="misc_info" name="tips">
+            <!-- unless the user is viewing someone else's profile and there's no info to show, show this card -->
+            <% unless !@own_view and @profile.profile_tips.empty? %>
+              <%= render :partial => 'profile_tips' %>
+            <% end %>
+          </div>
+          <!-- End: Tips -->
+        <% end %>
+
+        <!-- Begin: Certifications -->
+        <!-- unless the user is viewing someone else's profile and there's no info to show, show this card -->
+        <% unless !@own_view and ((@profile.full_profile_at.present? and @profile.profile_certifications.empty?) or (@profile.full_profile_at.nil? and @linkedin_profile.present? and @linkedin_profile.certifications.empty?))%>
+          <div class="mlp-box certifications" id="misc_info" name="certifications">
+            <%= render :partial => 'profile_certifications' %>
+          </div>
+        <% end %>
+        <!-- End: Certifications -->
+
+        <!-- Begin: Languages -->
+        <!-- unless the user is viewing someone else's profile and there's no info to show, show this card -->
+        <% unless !@own_view and ((@profile.full_profile_at.present? and @profile.profile_languages.empty?) or (@profile.full_profile_at.nil? and @linkedin_profile.present? and @linkedin_profile.languages.empty?))%>
+          <div class="mlp-box languages" id="misc_info" name="languages">
+            <%= render :partial => 'profile_languages' %>
+          </div>
+        <% end %>
+        <!-- End: Languages -->
+
+        <!-- Begin: Skills -->
+        <!-- unless the user is viewing someone else's profile and there's no info to show, show this card -->
+        <% unless !@own_view and ((@profile.full_profile_at.present? and @profile.profile_skills.empty?) or (@profile.full_profile_at.nil? and @linkedin_profile.present? and @linkedin_profile.skills.empty?))%>
+          <div class="mlp-box skills" id="misc_info" name="skills">
+            <%= render :partial => 'profile_skills' %>
+          </div>
+        <% end %>
+        <!-- End: Skills -->
+
+     <% end %>
+  </div>
+  <!-- END: Left Side Bar -->
+
+  <!-- BEGIN: Tabs -->
+  <% if @own_view %>
+    <%= render :partial => "profile_tabs" %>
+  <% else %>
+    <% if @profile.full_profile_at.present? %>
+      <%= render :partial => "profile_tabs" %>
+    <% else %>
+      <!-- don't need to display tabs; display only the other users' limited profile work history -->
+      <div class="col-content">
+        <h3 class="work-history-title grad1">Work History</h3>
+        <%= render :partial => "profile_limited_work_history" %>
+      </div>
+    <% end %>
+  <% end %>
+  <!-- END: TABS -->
+
+</div>
+
+<!-- BEGIN: Aside -->
+<div id="aside" class="col-aside">
+  <div id="my-awards" class="mlp-box">
+    <h2>My Awards</h2>
+    <ul class="award">
+	  <div class="giver">
+        <%= render :partial => 'award_transactions/my_award/my_award' %>
+	  </div>
+    </ul>
+    <!-- <a href="" class="see-all">See all 25 <span></span></a> -->
+  </div>
+
+  <!-- if user is looking at someone else's profile and there's nothing to display, don't show this -->
+  <% unless !@own_view and @likers.empty?  %>
+      <div id="who-likes-me" class="mlp-box">
+        <h2>Who Likes This Profile</h2>
+        <ul>
+          <% @likers.each do |liker| %>
+            <li><%= link_to image_tag(liker.avatar.url, :width => 50, :height => 50), profile_path(liker.profile) %></li>
+          <% end %>
+        </ul>
+      </div>
+  <% end %>
+
+  <!-- if user is looking at someone else's profile and there's nothing to display, don't show this -->
+  <% unless !@own_view and @visitors.empty? %>
+      <div id="my-visitors" class="mlp-box">
+        <h2>Visitors to This Profile</h2>
+        <ul>
+          <% @visitors.each do |v| %>
+            <li><a href=""><img src="<%= User.find(v.visitor_user_id).avatar.url %>" width="50" height="50" /></a></li>
+          <% end %>
+        </ul>
+        <!-- <a href="" class="see-all">See all <%= @visitors.count %> <span></span></a> -->
+      </div>
+  <% end %>
+
+  <!-- if user is viewing own limited profile, recommendations not to be shown in this location -->
+  <% unless @profile.full_profile_at.nil? and @own_view %>
+    <% unless @award_transactions.empty? %>
+      <%= render :partial => 'profile_recommendations' %>
+    <% end %>
+  <% end %>
+
+  <!-- unless the user is viewing his own limited profile, show these cards -->
+  <% unless @own_view and @profile.full_profile_at.nil? %>
+
+      <!-- unless the user is viewing someone else's profile and there's no info to show, show this card -->
+      <%# unless !@own_view and @linkedin_profile.dateOfBirth.nil? and @linkedin_profile.imaccounts.empty? %>
+        <div class="mlp-box personal_info" id="misc_info" name="personal_info">
+          <%# render :partial => 'profile_personal_info' %>
+        </div>
+      <%# end %>
+
+      <!-- unless the user is viewing someone else's profile and there's no info to show, show this card -->
+      <% unless !@own_view and ((@profile.full_profile_at.present? and @profile.profile_specialties.empty?) or (@profile.full_profile_at.nil? and @linkedin_profile.present? and @linkedin_profile.specialties.empty?))%>
+        <div class="mlp-box specialties" id="misc_info" name="specialties">
+          <%= render :partial => 'profile_specialties' %>
+        </div>
+      <% end %>
+
+      <!-- unless the user is viewing someone else's profile and there's no info to show, show this card -->
+      <% unless !@own_view and ((@profile.full_profile_at.present? and @profile.profile_associations.empty?) or (@profile.full_profile_at.nil? and @linkedin_profile.present? and @linkedin_profile.associations.empty?))%>
+        <div class="mlp-box associations" id="misc_info" name="associations">
+          <%= render :partial => 'profile_associations' %>
+        </div>
+      <% end %>
+  <% end %>
+
+</div>
+<!-- END: Aside -->

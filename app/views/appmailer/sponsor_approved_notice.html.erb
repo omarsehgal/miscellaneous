@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" >
+    <style type="text/css" media="screen">
+        body {font-family: calibri; font-size: 11pt}
+        div {color: gray; font-style:italic; font-size: 9pt}
+    </style>
+  </head>
+  <body>
+    <div>
+      This is an automatic response, please do not reply.
+    </div>
+    <p>
+        <%= get_full_name(@project_user.sponsor) %> has approved <%= get_full_name(@project_user.name)%> for <%= @project_user.project %>. <br/><br/>
+        Please complete the request at <%= link_to "Project Access Request", "http://scyweb05.sc.intel.com:3005/project_users" %>.
+    </p>
+    <div>
+      This was sent via Project Access Request (<%= link_to "http://goto/iteam", "goto/iteam" %>)
+    </div>
+  </body>
+</html>

@@ -1,0 +1,9 @@
+<h3>Public Profile</h3>
+<a class="save" href="">save</a>
+<%= form_for @profile do |f| %>
+  <%= text_field :user, :login, :value => current_user.login, :size => 5 %>.blinkup.com
+  <% if @profile_update_error.present? %>
+    <div><%= @profile_update_error %></div>
+  <% end %>
+  <%= hidden_field_tag "profile_card", "public_profile" %>
+<% end %>

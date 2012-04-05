@@ -1,0 +1,16 @@
+<h2>Me in the media <span class="edit">edit</span></h2>
+<ul>
+  <% if @profile.url_contact_infos.count == 0 %>
+    <li>
+      <blockquote><p>Please add..</p></blockquote>
+	</li>
+  <% else %>
+    <% @profile.url_contact_infos.each do |url| %>
+      <li>
+        <blockquote>
+          <p><%= link_to url.value, "http://#{url.value}", :target => "_blank" %></p>
+	    </blockquote>
+	  </li>
+    <% end %>
+  <% end %>
+</ul>

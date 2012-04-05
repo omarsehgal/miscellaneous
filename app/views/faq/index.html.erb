@@ -1,0 +1,365 @@
+<%= stylesheet_link_tag 'jquery-ui' %>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.1/jquery-ui.min.js"></script>
+<script type="text/javascript" src="/ckeditor/ckeditor.js"></script>
+
+<script type="text/javascript">
+
+$(document).ready(function() {
+
+  var change_q_parent = 0;
+  var change_question_id = 0;
+
+  $.ajaxSetup({
+     key: 'value'
+  });
+
+  $(function() {
+      $.ajaxSetup({
+          error: function(jqXHR, exception) {
+              if (jqXHR.status === 0) {
+                  alert('Not connect.\n Verify Network.');
+              } else if (jqXHR.status == 404) {
+                  alert('Requested page not found. [404]');
+              } else if (jqXHR.status == 500) {
+                  alert('Internal Server Error [500].');
+              } else if (exception === 'parsererror') {
+                  alert('Requested JSON parse failed.');
+              } else if (exception === 'timeout') {
+                  alert('Time out error.');
+              } else if (exception === 'abort') {
+                  alert('Ajax request aborted.');
+              } else {
+                  alert('Uncaught Error.\n' + jqXHR.responseText);
+              }
+          }
+      });
+  });
+
+  $("#question-form").dialog({
+    autoOpen: false,
+    modal: true,
+    width: 450,
+    buttons: {
+      "Add": function() {
+        var title = $("#newtitle").val().replace(/\'/g,'\\\'').replace(/"/g, '&quot;').replace(/\u0000/g, "\\0");
+        var content = $("#newcontent").val().replace(/\'/g,'\\\'').replace(/"/g, '&quot;').replace(/\u0000/g, "\\0");
+        //.replace(/\n/g, '<br \\>');
+        //replace(/\'/g,'\\\'').replace(/"/g, '&quot;').replace(/\u0000/g, "\\0");
+        var team_id = $('select#team_id :selected').val();
+        var cat_id = $('select#category_id :selected').val();
+
+        if(title == ""){
+            alert("Title cannot be blank");
+            $('#newtitle').focus();
+            return false;
+        }
+        $.get('/faq/post-question?title=' + title + '&content=' + content + '&team_id=' + team_id + '&cat_id=' + cat_id , function(data){
+          alert("Thanks, your entry was successfully submitted");
+          $("#show-results").html(data);
+        });
+        $(this).dialog("close");
+      },
+      Cancel: function() {
+        $(this).dialog("close");
+      }
+    }
+  });
+
+  $("#post-question").live("click", (function() {
+    var team_id = $('select#team_id :selected').val();
+    var cat_id = $('select#category_id :selected').val();
+    if(team_id == "" || cat_id == "" || team_id == null || cat_id == null){
+        alert("To post a new discussion, first select a team and category from the menu on the left")
+        return false;
+    }
+    $("#question-form").dialog("open");
+      // prevent the default action, e.g., following a link
+      return false;
+  }));
+
+
+  $('#newtitle').live("keyup", (function(){
+      var max = parseInt($(this).attr('maxlength'));
+      if($(this).val().length > max){
+          $(this).val($(this).val().substr(0, $(this).attr('maxlength')));
+      }
+      $('#new-content').html('(title) characters remaining: ' + (max - $(this).val().length));
+  }));
+
+  $('#newcontent').live("keyup", (function(){
+      var max = parseInt($(this).attr('maxlength'));
+      if($(this).val().length > max){
+          $(this).val($(this).val().substr(0, $(this).attr('maxlength')));
+      }
+      $('#new-content').html('(content) characters remaining: ' + (max - $(this).val().length));
+  }));
+
+    $("#recent-posts").click(function() {
+      jQuery.get('/faq/recent_posts', function(data){
+          $("#show-results").html(data);
+      })
+      return false;
+    });
+
+
+  $("#team_id").change(function() {
+    var team_id = $('select#team_id :selected').val();
+    if(team_id == ""){
+        alert('Select a Team');
+        return false;
+    }
+    //$("#show-results").html("")
+    jQuery.get('/faq/get_categories?team_id=' + team_id, function(data){
+        $("#categories").html(data);
+    })
+    return false;
+  });
+
+  $("#category_id").live("change", (function() {
+    var tid = $('select#team_id :selected').val();
+    var cid = $('select#category_id :selected').val();
+
+    // check to see if category has been selected to change the parent
+    // of a question or to get content for a category
+    if(change_q_parent == 1){
+      if(confirm("Confirm move..")){
+        jQuery.get('/faq/change_parent?team_id=' + tid + '&category_id= ' + cid + '&qid=' + change_question_id, function(data){
+          change_q_parent = 0;
+          $(".parent-change-message").toggle();
+          $("#show-results").html(data);
+          alert("Question moved. Displaying content for selected category");
+        });
+      }
+      else{
+          return false;
+      }
+      return false;
+    }
+
+    jQuery.get('/faq/get_selections?team_id=' + tid + '&category_id= ' + cid, function(data){
+      $("#show-results").html(data);
+    });
+    return false;
+  }));
+
+  $(".change-parent").live("click", function() {
+    change_question_id = $(this).attr("id");
+    change_q_parent = 1;
+    $(".parent-change-message").toggle();
+  });
+
+  $(".show-link").live("click", function() {
+    var qid = $(this).attr("id");
+    var url = $(location).attr('href');
+    url = "http://scyweb05.sc.intel.com:3005/faq/index?name=question&id=" + qid;
+    url = "<a href='"+url+"' target=_blank>"+url+"</a>";
+    $("#link-div_" + qid).html(url);
+    $("#link-div_" + qid).toggle();
+    //$("#show-link").html("Copy-paste this url: " + url);
+    //$("#show-link").dialog("open");
+    // prevent the default action, e.g., following a link
+    return false;
+  });
+
+  /*
+  $("#show-link").dialog({
+    autoOpen: false,
+    modal: true,
+    width: 450,
+    buttons: {
+      Cancel: function() {
+        $(this).dialog("close");
+      }
+    }
+  });
+  */
+
+  $(".search").live("click", (function() {
+    //var q = $('#search').val().trim();
+    var q = $('#search').val();
+    if(q == ""){
+        //$(".keyword-error-msg").html("enter one or more keyword(s)");
+        return false;
+    }
+    jQuery.get('/faq/search?search=' + q, function(data){
+        $(".keyword-error-msg").html("");
+        $("#show-results").html(data);
+    })
+    return false;
+  }));
+
+  $(".tup").live("click", function() {
+    var self = $(this);
+    var ans_id = self.parent().parent().attr("answer-id");
+    $.get("/faq/answer_feedback?feed=1&id=" + ans_id, function() {
+        self.parent().html("Thanks, appreciate the feedback");
+    });
+  });
+
+  $(".tdown").live("click", function() {
+    var self = $(this);
+    var ans_id = self.parent().parent().attr("answer-id");
+    $.get("/faq/answer_feedback?feed=0&id=" + ans_id, function() {
+        self.parent().html("Thanks, appreciate the feedback");
+    });
+  });
+
+  $(".show-answers").live("click", (function() {
+    var qid = $(this).attr("qid");
+    jQuery.get('/faq/get_answer?qid=' + qid, function(data){
+      $("#answer_" + qid).toggle("slow", function(){
+        $("#answer_" + qid).html(data);
+      });
+    });
+    return false;
+  }));
+
+  $('.new-answer').live("keyup", (function(){
+      var max = parseInt($(this).attr('maxlength'));
+      if($(this).val().length > max){
+          $(this).val($(this).val().substr(0, $(this).attr('maxlength')));
+      }
+      $('#answer-chars').html('characters remaining: ' + (max - $(this).val().length));
+  }));
+
+    $(".new-answer-req").live("click", (function() {
+      var qid = $(this).attr("name");
+      jQuery.get('/faq/new_answer?qid=' + qid, function(data){
+          // if  the answers are already being displayed
+          if($("#answer_" + qid).css("display") == "block"){
+              $("#answer_" + qid).append(data);
+          }
+          else{
+              $("#answer_" + qid).toggle("slow", function(){
+                  $("#answer_" + qid).html(data);
+              });
+          }
+      });
+      return false;
+    }));
+
+  $(".add-answer").live("click", (function() {
+    var qid = $(this).attr("name");
+    var answer = $('#ans_' + qid).val().replace(/\'/g,'\\\'').replace(/"/g, '&quot;').replace(/\u0000/g, "\\0");
+    answer = jQuery.trim(answer);
+
+    if(answer == ""){
+        $('#ans_' + qid).focus();
+        return false;
+    }
+    jQuery.get('/faq/new_answer?submit=1&qid=' + qid + '&answer=' + answer, function(data){
+      $("#answer_" + qid).html(data);
+    });
+    return false;
+  }));
+
+  /*
+  $("#post-question").live("click", (function() {
+    var team_id = $('select#team_id :selected').val();
+    var cat_id = $('select#category_id :selected').val();
+    //alert(team_id + ", " + cat_id);
+    if(team_id == "" || cat_id == "" || team_id == null || cat_id == null){
+        alert("To post a question, first select a team and category from the menu on right")
+        return false;
+    }
+    $(".show-question").toggle("slow", function(){
+        $(".show-question").html("<%= escape_javascript(render(:partial => 'question_form')) %>")
+        return false;
+    })
+  }));
+
+
+  $(".new-question").live("click", (function() {
+    var team_id = $('select#team_id :selected').val();
+    var cat_id = $('select#category_id :selected').val();
+    //alert(team_id + ", " + cat_id);
+    var qtext = $('#que_text').val();
+    if(qtext == ""){
+        alert("You cannot submit a blank question");
+        $('#que_text').focus();
+        return false;
+    }
+    jQuery.get('/faq/post-question?que=' + qtext + '&team_id=' + team_id + '&cat_id=' + cat_id , function(data){
+      $(".show-question").html("Thanks, your question has been noted and the appropriate category owner will be notified");
+    });
+    return false;
+  }));
+
+  */
+
+  $("#show-keywords").live("click", (function() {
+    $(".search-keywords").toggle();
+  }));
+});
+
+</script>
+
+<%# image_tag("faq.jpg", :alt => "DA FAQ", :class => "round") %>
+<p>logged in as <b><%= get_first_name(session[:idsid]) %></b>..<br /><%# request.headers %>
+<table class="faq-search">
+  <tr>
+    <td class="search-category2" colspan="2">Select Team and Category to view posts</td>
+    <td class="search-separator">&larr; or &rarr;</td>
+    <td class="search-category1">Perform a keyword search <%= link_to '(recent keywords)', '#', :id => "show-keywords" , :class => 'quick-links' %></td>
+  </tr>
+  <tr>
+    <td class="search-options">
+      <% form_tag('/faq/get_categories', :remote => true) do %>
+        <%= collection_select(:team, :id, @teams, :id, :name, options ={:prompt => "Select a team"}, :class => "select") %><br />
+      <% end %>
+    </td>
+    <td class="search-options">
+      <div id="categories"></div>
+    </td>
+    <td class="search-options"></td>
+    <td class="search-options">
+      <% form_tag('/faq/search', :remote => true) do%>
+        <%= text_field_tag :search, params[:search], :size => 50 %>
+        <%= submit_tag "search", :class => 'search' %>
+      <% end %>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2">
+      <div class="parent-change-message" style="display: none;">
+        Select the team and category you wish to move the question to
+      </div>
+    </td>
+    <td></td>
+    <td>
+      <div class="search-keywords" style="display: none;">
+        <% @keywords.each do |k| %>
+            <%= "#{k.content}, " %>
+        <% end %>
+      </div>
+    </td>
+  </tr>
+</table>
+<p class="page-menu">
+    <%= link_to 'Manage Teams', teams_path %> |
+    <%= link_to 'Manage Categories', categories_path %> |
+    <%= link_to 'My Categories', '/category/my_categories' %> |
+    <%= link_to 'Post new discussion', '#', :id => "post-question" %> |
+    <%= link_to 'Recent Posts', '#', :id => "recent-posts" %>
+</p>
+<div id="show-results">
+  <%= render :partial => 'show_results' %>
+</div><br />
+<div id="question-form" title="Post a new discussion">
+  To avoid duplicate discussion topics, please first check (via search) to see if no similar topics/discussions exist.
+  <%= form_tag do %>
+      <table>
+       <tr>
+         <td><%= label_tag(:s, "Title:") %></td>
+         <td><%= text_area_tag "newtitle", "",  :rows => 3, :cols => 42, :maxlength => 140 %><span class="quick-links">(max length: 140)</span></td>
+       </tr>
+       <tr>
+         <td><%= label_tag(:m, "Content:") %></td>
+         <td><%= text_area_tag "newcontent", "", :rows => 10, :cols => 42, :maxlength => 1040 %><span class="quick-links">(max length: 1040)</span></td>
+       </tr>
+     </table>
+  <% end %>
+  <div id="new-content" class="char-countdown"></div>
+</div>
+
+

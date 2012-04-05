@@ -1,0 +1,26 @@
+<h2>Specialties <span class="edit">edit</span></h2>
+<ul>
+  <% if @profile.full_profile_at.nil? %>
+    <% @linkedin_profile.specialties.split(/,/).each do |sp| %>
+      <li>
+        <blockquote>
+          <p><%= sp %></p>
+        </blockquote>
+      </li>
+    <% end %>
+  <% else %>
+      <% if @profile.profile_specialties.empty? %>
+        <li>
+          <blockquote><p>Please add..</p></blockquote>
+        </li>
+      <% else %>
+        <% @profile.profile_specialties.each do |pl| %>
+          <li>
+            <blockquote>
+              <p><%= pl.name %></p>
+            </blockquote>
+          </li>
+        <% end %>
+      <% end %>
+  <% end %>
+</ul>

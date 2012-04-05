@@ -1,0 +1,8 @@
+<h3>Public Profile</h3>
+<a class="edit">edit</a>
+<% if @user.login.present? %>
+  <span>http://<span class="url"><%= @user.login %></span>.blinkup.com</span>
+<% else %>
+  <span>Please add..</span>
+<% end %>
+

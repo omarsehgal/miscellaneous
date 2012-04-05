@@ -1,0 +1,554 @@
+<% renders "profile" %>
+
+<% content_for :javascripts do %>
+  <%= javascript_include_tag 'jquery.colorbox.js' %>
+  <%= javascript_include_tag 'jquery.imgareaselect.pack.js' %>
+  <%= javascript_include_tag 'jquery.blockui.js' %>
+  <%= javascript_include_tag 'jquery.scrollto.min' %>
+<% end %>
+
+<% content_for :stylesheets do %>
+  <%= stylesheet_link_tag 'colorbox.css' %>
+  <%= stylesheet_link_tag 'upload-photo.css' %>
+  <%= stylesheet_link_tag 'imgareaselect-default.css' %>
+<% end %>
+
+<style media="screen" type="text/css">
+    .defaultText { width: 300px; }
+    .defaultTextActive { color: #a1a1a1; font-style: italic; }
+</style>
+
+<script>
+$(document).ready(function() {
+  var login_error = 0;
+  var email_error = 0;
+  var phone_error = 0;
+  var lprocess = 0;
+  var eprocess = 0;
+
+  // this is just to give the user an idea of what to enter into fields
+  $("#upload-avatar").colorbox({href: "/upload_avatar"});
+
+  $('.sample_data').each(function(){
+    //alert($(this).attr("id"));
+    if($(this).attr("id") == "profile_personal_interests"){
+      <% if current_user.linkedin_profile.interests.present? %>
+        return true;
+      <% end %>
+    }
+    $(this).val($(this).attr("example"));
+    $(this).addClass("defaultTextActive");
+  });
+
+  $(".sample_data").live("focus", function(){
+    if ($(this).val() == $(this).attr("example")){
+      $(this).removeClass("defaultTextActive");
+      $(this).val("");
+    }
+  });
+
+  $(".sample_data").live("blur", function(){
+    if ($(this).val() == ""){
+      $(this).addClass("defaultTextActive");
+      $(this).val($(this).attr("example"));
+    }
+  });
+
+  $("#new_profile").submit(function() {
+    if(login_error == 1){
+      $('#user_login').focus();
+      return false;
+    }
+    if(email_error == 1){
+      $('#user_email').focus();
+      return false;
+    }
+    if(phone_error == 1){
+      //$.scrollTo('div.phone-number div.error-msg');
+      return false;
+    }
+    $('.sample_data').each(function(){
+      if($(this).attr("example") == $(this).val()){
+        $(this).val("")
+      }
+    });
+  });
+
+  $('#emailLoadingDiv').hide()
+  $('#loginLoadingDiv').hide()
+
+  .ajaxStart(function() {
+    if(lprocess == 1){
+      $('div.pub-profile-url div.error-msg').html("");
+      $('#loginLoadingDiv').show();
+    }
+    if(eprocess == 1){
+      $('div.email-entry div.error-msg').html("");
+      $('#emailLoadingDiv').show();
+    }
+  })
+  .ajaxStop(function() {
+    if(lprocess == 1){
+      $('#loginLoadingDiv').hide();
+      lprocess = 0;
+    }
+    if(eprocess == 1){
+      $('#emailLoadingDiv').hide();
+      eprocess = 0;
+    }
+  })
+
+  $(".numeric").live("blur", function(){
+    var value = $(this).val();
+    //if(value != ""){
+      //if(!isNumeric(value))
+        //$('div.phone-number div.error-msg').html("Only numeric values are allowed for phone numbers");
+        //console.log($(this));
+        //$(this).parent().parent().children('div.error-msg').html("Only numeric values are allowed for phone numbers");
+        //phone_error = 1;
+      //}
+      //else{
+      //  if(phone_error != 1){
+          //$(this).parent().parent().children('div.error-msg').html("");
+      //    phone_error = 0;
+      //  }
+      //}
+  });
+
+  $('#user_login').focusout(function(){
+    var login = $(this).val().trim();
+    lprocess = 1;
+    if(login != ""){
+      $.post("/profiles/validate_create_profile?login=" + login, function(data){
+        if(data.match(/Login already in use/)){
+          $('div.pub-profile-url div.error-msg').html(data);
+          login_error = 1;
+          return false;
+        }
+        else{
+          $('div.pub-profile-url div.error-msg').html("Success - Login available");
+          login_error = 0;
+        }
+      })
+    }
+  });
+
+  $('#user_email').focusout(function(){
+    var email = $(this).val().trim();
+    if(email != ""){
+      if(!isValidEmailAddress(email)){
+        $('div.email-entry div.error-msg').html("Email address not valid");
+        email_error = 1
+        return false;
+      }
+      else{
+        email_error = 0;
+      }
+      eprocess = 1;
+      $.post("/profiles/validate_create_profile?email=" + email, function(data){
+        if(data.match(/Email already in use/)){
+          $('div.email-entry div.error-msg').html(data);
+          email_error = 1;
+          return false;
+        }
+        else{
+          $('div.email-entry div.error-msg').html("Success - Email available");
+          email_error = 0;
+        }
+      })
+    }
+  });
+
+  $('#profile_profile_tips_attributes_0_content').val("A favorite branding tip: \"Be consistent\"");
+  $('#profile_profile_tips_attributes_0_content').addClass("defaultTextActive sample_data");
+  $("#profile_profile_tips_attributes_0_content").attr("example", "A favorite branding tip: \"Be consistent\"");
+
+  $('#profile_profile_tips_attributes_1_content').val("A favorite business quote about sales is: \"The greatest glory in living lies not in never failing, but in rising every time we fail –Oliver Goldsmith\"");
+  $('#profile_profile_tips_attributes_1_content').addClass("defaultTextActive sample_data");
+  $("#profile_profile_tips_attributes_1_content").attr("example", "A favorite business quote about sales is: \"The greatest glory in living lies not in never failing, but in rising every time we fail –Oliver Goldsmith\"");
+
+  $('#profile_profile_tips_attributes_2_content').val("A favorite business book about social marketing is: \"The Tipping Point by Malcom Gladwell\"");
+  $('#profile_profile_tips_attributes_2_content').addClass("defaultTextActive sample_data");
+  $("#profile_profile_tips_attributes_2_content").attr("example", "A favorite business book about social marketing is: \"The Tipping Point by Malcom Gladwell\"");
+
+  $('#profile_profile_tips_attributes_3_content').val("A favorite website the helps with innovation is: www.unresonableinstitute.org");
+  $('#profile_profile_tips_attributes_3_content').addClass("defaultTextActive sample_data");
+  $("#profile_profile_tips_attributes_3_content").attr("example", "A favorite website the helps with innovation is: www.unresonableinstitute.org");
+});
+
+function popupclosed(url) {
+  $("#image img").attr("src", url);
+}
+</script>
+
+<%= stylesheet_link_tag 'profile-create' %>
+
+<!-- BEGIN: Create Profile -->
+<div id="profile-create" class="mlp-box">
+  <h2>Create Profile</h2>
+
+<%= form_for setup_profile(@profile), :html => { :multipart => true } do |f| %>
+  <%= f.error_messages %>
+
+  <!-- Begin: Identity Bar -->
+  <div id="identity-bar">
+    <h3><%= current_user.full_name %>
+      <% unless current_user.is_charter.nil? %>
+        <span class="preferred">
+      <% end %>
+      <!-- </span><span class="star"></span> --></h3>
+    <div>
+      <p><%= @linkedin_profile.num_connections %> Connections<br/><%= @linkedin_profile.recommenders_count %> Recommendations</p>
+    </div>
+  </div>
+  <!-- End: Identity Bar -->
+
+  <div id="profile-info">
+    <!-- Begin: Image -->
+    <div id="image" class="create-section">
+      <h3>Image</h3>
+
+      <div>
+        <%= image_tag current_user.linkedin_profile.avatar.url %>
+        <div class="upload">
+           <!-- <%= f.file_field :avatar %> -->
+          <a id="upload-avatar" href="#" class="mlp-button"><span>Upload a bigger<br/>&amp; better photo</span></a>
+        </div>
+      </div>
+    </div>
+    <!-- End: Image -->
+
+    <!-- Begin: Row -->
+    <div class="pub-profile-url">
+      <label for="">Public Profile</label>
+      <%= text_field :user, :login, :value => @suggested_login %>
+      <span>.blinkup.com</span>
+      <div id="loginLoadingDiv"><%= image_tag 'loading_small.gif' %> validating login..</div>
+      <div class="error-msg"></div>
+    </div>
+    <!-- End: Row -->
+
+    <div id="profile-box">
+      <h3>Lorem ipsum dolor sit</h3>
+      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+      <a href="" class="read-more">Read more<span></span></a>
+    </div>
+  </div>
+
+  <!-- Begin: Location -->
+  <%= fields_for :location do |location| %>
+  <% if @linkedin_profile.address.present?
+     zip = /.*([0-9]{5}).*/.match(@linkedin_profile.address)
+     zip = zip[1]
+     state = /.*([A-Z]{2}).*/.match(@linkedin_profile.address)
+   end %>
+  <div id="location" class="create-section">
+    <h3>Location</h3>
+
+    <div class="section-content">
+      <div class="input-block city">
+        <label for="city">City</label>
+        <%= location.text_field :city, :value => @linkedin_profile.location.name %>
+      </div>
+      <div class="input-block state">
+        <label for="state">State / Provence</label>
+        <%= location.text_field :state %>
+      </div>
+      <div class="input-block zip">
+        <label for="zip">Postal / Zip Code</label>
+        <%= location.text_field :zip_code, :value => zip %>
+      </div>
+      <div class="input-block country">
+        <label for="country">Country</label>
+        <%= location.collection_select(:country, Country.all, :id, :name) %>
+      </div>
+    </div>
+  </div>
+  <% end %>
+  <!-- End: Location -->
+
+  <!-- Begin: Industry -->
+  <div id="industry" class="create-section">
+    <h3>Industry</h3>
+    <div class="section-content">
+      <div class="section">
+        <label for="primary-industry">Primary Industry</label>
+        <%= f.collection_select(:primary_industry_id, Industry.all, :id, :name, {:selected => current_user.linkedin_profile.industry_id}) %>
+      </div>
+
+      <div class="section">
+        <label for="secondary-industry">Secondary Industry</label>
+        <%= f.collection_select(:secondary_industry_id, Industry.all, :id, :name, {:prompt => 'Choose one'}) %>
+      </div>
+
+      <div class="section">
+        <label for="other-industry">Other Industry</label>
+        <%= f.text_field :third_industry %>
+      </div>
+    </div>
+  </div>
+  <!-- End: Industry -->
+
+  <!-- Begin: Summary Information -->
+
+  <div id="summary-info" class="create-section">
+    <h3>Summary Information</h3>
+    <%= f.fields_for :positions do |position| %>
+    <div class="section-content">
+      <!-- Begin: Row -->
+      <div class="section">
+        <div class="job-company">
+          <label for="">Job Title / Company Name</label>
+          <%= collection_select(:position, :id, @linkedin_profile.positions, :id, :name) %>
+        </div>
+
+        <div>
+          <label for="">Headline</label>
+          <%= f.text_field :headline, :value => @linkedin_profile.headline %>
+
+        </div>
+
+        <div class="employees">
+          <label for="">Employees</label>
+          <%= collection_select(:position, :size, CompanySize.all, :id, :name) %>
+        </div>
+
+        <div>
+          <label for="">Company URL</label>
+            <!-- , :value => @first_company_info.websiteUrl -->
+            <%= text_field :position, :url %>
+        </div>
+
+        <div>
+          <label for="">Function</label>
+          <%= collection_select(:position, :function, JobFunction.all, :id, :name, {:prompt => 'Choose one'}) %>
+        </div>
+        <div>
+          <label for="">Career Level</label>
+          <%= collection_select(:position, :level, JobLevel.all, :id, :name, {:prompt => 'Choose one'}) %>
+        </div>
+
+        <div class="email-entry">
+          <label for="">Email</label>
+          <%= text_field :user, :email, :value => current_user.email %>
+          <div id="emailLoadingDiv"><%= image_tag 'loading_small.gif' %> validating email address..</div>
+          <div class="error-msg"></div>
+        </div>
+
+        <%= f.fields_for :business_phone_contact_infos do |contact_info| %>
+        <div class="phone-number">
+          <label for="">Business Number</label>
+          <div>
+            <%= contact_info.text_field :country, :class => "country numeric" %>
+            <p>Country</p>
+          </div>
+          <div>
+            <%= contact_info.text_field :city, :class => "city numeric" %>
+            <p>City</p>
+          </div>
+          <div>
+            <%= contact_info.text_field :number, :class => "number numeric" %>
+            <p>Number</p>
+          </div>
+          <div class="error-msg"></div>
+        </div>
+        <% end %>
+
+        <%= f.fields_for :mobile_phone_contact_infos do |contact_info| %>
+        <div class="phone-number">
+          <label for="">Mobile Number</label>
+          <div>
+            <%= contact_info.text_field :country, :class => "country numeric" %>
+            <p>Country</p>
+          </div>
+          <div>
+            <%= contact_info.text_field :city, :class => "city numeric" %>
+            <p>City</p>
+          </div>
+          <div>
+            <%= contact_info.text_field :number, :class => "number numeric" %>
+            <p>Number</p>
+          </div>
+          <div class="error-msg"></div>
+        </div>
+        <% end %>
+      </div>
+      <!-- End: Row -->
+
+      <!-- Begin: Row -->
+      <div class="section">
+        <div class="education-entry">
+          <label for="">University / Degree / Year</label>
+          <%= collection_select(:education, :id, @linkedin_profile.educations, :id, :school_name) %>
+        </div>
+      </div>
+      <!-- End: Row -->
+    </div>
+    <% end %>
+  </div>
+  <!-- End: Summary Information -->
+
+  <!-- Begin: About Me -->
+  <div id="about-me" class="create-section">
+    <h3>About Me</h3>
+
+    <div class="section-content">
+      <div class="section">
+        <h4>I&rsquo;m Looking For (Hobbies, Travel, etc.)</h4>
+        <%= f.text_area :looking_for, :rows => 0, :class => "sample_data", :example => "examples of viral marketing campaigns among financial institutions, pitfalls of setting up an LLC" %>
+      </div>
+      <div class="section">
+        <h4>I&rsquo;m Offering for Free</h4>
+        <%= f.text_area :offering, :rows => 0, :class => "sample_data", :example => "social media marketing know how, project management" %>
+      </div>
+      <div class="section">
+        <h4>Personal Interests</h4>
+        <%= f.text_area :personal_interests, :rows => 0, :class => "sample_data", :value => @linkedin_profile.interests, :example => "hiking, photography, tennis, golf" %>
+      </div>
+      <div class="section">
+        <h4>Professional Interests</h4>
+        <%= f.text_area :professional_interests, :rows => 0, :class => "sample_data", :example => "clean tech industry, search engine optimization, portfolio analysis tools" %>
+      </div>
+      <div class="section">
+        <h4>Me in the Media</h4>
+        <div id="urls" class="media">
+          <div class="fields">
+           <%= f.fields_for :url_contact_infos do |builder| %>
+             <%= render "url_contact_info_fields", :f => builder %>
+           <% end %>
+         </div>
+         <%= link_to_add_fields("Add", f, :url_contact_infos) %>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <!-- End: About Me -->
+
+  <!-- Begin: Tips -->
+  <div id="tips" class="create-section">
+    <h3>Tips</h3>
+
+    <div class="section-content">
+      <%= f.fields_for :profile_tips do |tip| %>
+      <div class="section">
+        <%= tip.hidden_field :profile_tip_type, :value => tip.object.profile_tip_type %>
+        <div class="tip-data">
+          <p>A favorite <%= tip.object.profile_tip_type %> </p>
+          <%= tip.collection_select(:tip_category_id, TipCategory.all, :id, :description) %>
+          <p>tip:</p>
+          <%= tip.text_field :content %>
+        </div>
+      </div>
+      <% end %>
+    </div>
+  </div>
+  <!-- End: Tips -->
+
+  <!-- Begin: Additional Information -->
+  <div id="additional-info" class="create-section">
+    <h3>Additional Info</h3>
+
+    <div class="section-content">
+      <div id="personal-information">
+        <h4>Personal Information</h4>
+        <div class="birthday">
+          <p>Birthday</p>
+          <div>
+            <% if @linkedin_profile.dateOfBirth.present? %>
+              <%= text_field :user, :birth_month, :value => @linkedin_profile.dateOfBirth.month, :class => "month" %>
+            <% else %>
+              <%= text_field :user, :birth_month, :class => "month" %>
+            <% end %>
+            <p>Month</p>
+          </div>
+          <div>
+            <% if @linkedin_profile.dateOfBirth.present? %>
+              <%= text_field :user, :birth_day, :value => @linkedin_profile.dateOfBirth.day, :class => "day" %>
+            <% else %>
+              <%= text_field :user, :birth_day, :class => "day" %>
+            <% end %>
+            <p>Day</p>
+          </div>
+          <div>
+            <% if @linkedin_profile.dateOfBirth.present? %>
+              <%= text_field :user, :birth_year, :value => @linkedin_profile.dateOfBirth.year, :class => "year" %>
+            <% else %>
+              <%= text_field :user, :birth_year, :class => "year" %>
+            <% end %>
+            <p>Year</p>
+          </div>
+        </div>
+
+        <div class="gender">
+          <p>Gender</p>
+          <%= select :user, :gender, "<option value='male'>Male</option><option value='female'>Female</option>" %>
+        </div>
+
+        <div class="hometown">
+          <p>Hometown</p>
+          <%= f.text_field :hometown %>
+        </div>
+
+      </div>
+      <div id="skills">
+        <h4>Skills</h4>
+        <p>
+           <%= f.fields_for :profile_skills do |builder| %>
+             <%= builder.text_field :name, :value => builder.object.name %>
+           <% end%>
+           <%= link_to_add_fields("Add", f, :profile_skills) %>
+        </p>
+      </div>
+      <div id="certifications">
+        <h4>Certifications</h4>
+        <p>
+          <%= f.fields_for :profile_certifications do |builder| %>
+            <%= builder.text_field :name, :value => builder.object.name %>
+          <% end%>
+           <%= link_to_add_fields("Add", f, :profile_certifications) %>
+        </p>
+      </div>
+      <div id="languages">
+        <h4>Languages</h4>
+         <p>
+           <%= f.fields_for :profile_languages do |builder| %>
+              <%= render "profile_language_fields", :f => builder %>
+            <% end%>
+            <%= link_to_add_fields("Add", f, :profile_languages) %>
+         </p>
+      </div>
+      <div id="specialties">
+        <h4>Specialties</h4>
+         <p>
+           <%= f.fields_for :profile_specialties do |builder| %>
+              <%= render "profile_specialty_fields", :f => builder %>
+            <% end%>
+            <%= link_to_add_fields("Add", f, :profile_specialties) %>
+         </p>
+      </div>
+      <div id="associations">
+        <h4>Associations</h4>
+        <p>
+          <%= f.fields_for :profile_associations do |builder| %>
+              <%= render "profile_association_fields", :f => builder %>
+          <% end%>
+          <%= link_to_add_fields("Add", f, :profile_associations) %>
+        </p>
+      </div>
+    </div>
+  </div>
+  <!-- End: Additional Information -->
+
+  <!-- Begin: Bottom/Create -->
+  <div id="create-block">
+    <p>I hereby elect to add these fields to my blinkup profile. I understand that blinkup is designed to make it easy to meet and get to know new members and thus the visibility and contact rules are less restrictive than on LinkedIn. Profiles are visible to all other members, are indexed by search engines and can also be viewed by non-members. Members are free to contact each other, but emails or other contact info are not exposed in the process unless you choose to share them.</p>
+    <div class="mlp-button">
+      <%= f.submit "Create Profile", :class => "mlp-button" %>
+    </div>
+  </div>
+  <!-- End: Bottom/Create -->
+
+<% end %>
+</div>
+<!-- END: Create Profile -->

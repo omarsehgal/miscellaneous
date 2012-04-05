@@ -1,0 +1,30 @@
+<div class="col-content tabs">
+    <!-- Begin: About Me Tab -->
+    <div id="about-me" class="tab-block active">
+      <div class="tab">About Me</div>
+      <div class="tab-body">
+        <%= render :partial => 'profile_aboutme' %>
+
+        <!-- unless the user is viewing someone else's profile and there's no info to show, show this card -->
+        <% unless !@own_view and @profile.url_contact_infos.empty? %>
+          <div class="mlp-box url_contact_info" id="misc_info" name="url_contact_info">
+            <%= render :partial => "profile_url_contact_info" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+    <!-- End: About Me Tab -->
+
+    <!-- Begin: Work History Tab -->
+    <div id="work-history" class="tab-block">
+      <div class="tab">Work History</div>
+      <div class="tab-body">
+        <% if @profile.full_profile_at.nil? %>
+          <%= render :partial => "profile_limited_work_history" %>
+        <% else %>
+          <%= render :partial => "profile_work_history" %>
+        <% end %>
+      </div>
+    </div>
+    <!-- End: Work History Tab -->
+</div>

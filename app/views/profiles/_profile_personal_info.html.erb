@@ -1,0 +1,21 @@
+<h2>Personal Information<span class="edit" href="">edit</span></h2>
+<ul>
+  <% if @profile.full_profile_at.nil? %>
+    <% if @linkedin_profile.dateOfBirth.present? %>
+      <li><%= Date::MONTHNAMES[@linkedin_profile.dateOfBirth.month] %> <%= @linkedin_profile.dateOfBirth.day %> <%= @linkedin_profile.dateOfBirth.year %></li>
+    <% end %>
+    <% if @linkedin_profile.imaccounts.present? %>
+      <li>IM: <%= @linkedin_profile.imaccounts.first.imAccountName %> (<%= @linkedin_profile.imaccounts.first.imAccountType %>)</li>
+    <% end %>
+  <% else %>
+    <% if @user.birthday.present? %>
+      <li><%= @user.birthday.strftime "%B %d" %></li>
+    <% end %>
+    <% if @user.gender.present? %>
+      <li><%= @user.gender.humanize %></li>
+    <% end %>
+    <% if @profile.hometown.present? %>
+      <li><%= @profile.hometown %></li>
+    <% end %>
+  <% end %>
+</ul>

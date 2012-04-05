@@ -1,0 +1,12 @@
+<h2>Certifications <span class="save">save</span></h2>
+<%= form_for update_profile(@profile), :html => { :multipart => true } do |f| %>
+  <%= f.error_messages %>
+    <% f.fields_for :profile_certifications do |builder| %>
+      <div class="fields">
+        <p><%= builder.text_field :name %> (<%= link_to_remove_fields "del", builder %>)</p>
+      </div>
+    <% end%>
+    <p><%= link_to_add_fields("Add", f, :profile_certifications) %></p>
+  <%= hidden_field_tag "misc_info", "certifications" %>
+<% end %>
+

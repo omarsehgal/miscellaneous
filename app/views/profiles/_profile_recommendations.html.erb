@@ -1,0 +1,10 @@
+<div class="col-sidebar">
+  <div id="recommendations" class="mlp-box">
+    <h2><%= @user.first_name %> Recommends</h2>
+    <ul>
+      <% @award_transactions.each do |recommended_award| %>
+        <li><span><%= recommended_award.award_name %>: </span><a href=""><%= recommended_award.receiver_full_name %></a></li>
+      <% end %>
+    </ul>
+  </div>
+</div>

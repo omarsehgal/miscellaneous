@@ -1,0 +1,36 @@
+<%= form_for @category, :html => {:multipart => true} do |f| %>
+  <%= render 'shared/error_messages', :object => f.object %>
+  <table>
+    <tr>
+      <td>
+        <%= f.label :name, "Category Name" %>
+      </td>
+      <td>
+        <%= f.label :owner, "Category Owner" %>
+      </td>
+      <td>
+	    <%= f.label :team, 'Select Team' %>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <%= f.text_field :name %>
+      </td>
+      <td>
+        <%= f.text_field :owner %>
+      </td>
+      <td>
+        <%= collection_select('category', 'team_id', @teams, "id", :name, options ={:prompt => "Select a team"}, :class => "select" ) %>
+      </td>
+    </tr>
+
+  </table>
+
+  <% f.fields_for :questions do |builder|	  %>
+    <%= render 'question_fields', :f => builder %>
+  <% end %>
+
+  <p><%= link_to_add_fields "Add New Question", f, :questions %></p>
+
+  <p><%= f.submit %></p>
+<% end %>

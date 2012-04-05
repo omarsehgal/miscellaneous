@@ -1,0 +1,15 @@
+development:
+  port: 9312
+  enable_star: true
+  min_prefix_len: 2
+  html_strip: true
+  bin_path: /p/mpg/webserver/sphinx-2.0.1-beta/bin
+
+production:
+  port: 9313
+  enable_star: true
+  min_prefix_len: 2
+  html_strip: true
+  bin_path: /p/mpg/webserver/sphinx-2.0.1-beta/bin
+
+

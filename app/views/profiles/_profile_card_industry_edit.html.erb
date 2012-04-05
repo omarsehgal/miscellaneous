@@ -1,0 +1,6 @@
+<h3>Industry</h3>
+<a class="save" href="">save</a>
+<%= form_for @profile do |f| %>
+  <%= f.collection_select(:primary_industry_id, Industry.all, :id, :name, {:selected => @profile.primary_industry.id}, {:style => "width:130px"}) %>
+  <%= hidden_field_tag "profile_card", "industry" %>
+<% end %>

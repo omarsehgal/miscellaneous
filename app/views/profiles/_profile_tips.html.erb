@@ -1,0 +1,46 @@
+<h2>Tips <span class="edit">edit</span></h2>
+<ul>
+  <li>
+    <p>A favorite <% if @tip.present? %><%= TipCategory.find(@tip.tip_category_id).description %><% end %> tip:</p>
+	<% if @tip.present? %>
+      <blockquote>
+        <p><strong>&ldquo;<%= @tip.content %>&rdquo;</strong></p>
+      </blockquote>
+    <% else %>
+        <p>Please add..</p>
+    <% end %>
+  </li>
+  <li>
+    <p>A favorite <% if @book.present? %><%= TipCategory.find(@book.tip_category_id).description %><% end %> business book:</p>
+    <% if @book.present? %>
+      <blockquote>
+        <p><strong>&ldquo;<%= @book.content %>&rdquo;</strong></p>
+      </blockquote>
+    <% else %>
+        <p>Please add..</p>
+    <% end %>
+  </li>
+  <li>
+    <p>A favorite <% if @quote.present? %><%= TipCategory.find(@quote.tip_category_id).description %><% end %> business quote:</p>
+	<% if @quote.present? %>
+      <blockquote>
+        <p><strong>&ldquo;<%= @quote.content %>&rdquo;</strong></p>
+	  </blockquote>
+    <% else %>
+        <p>Please add..</p>
+    <% end %>
+  </li>
+  <li>
+    <p>A favorite <% if @website.present? %><%= TipCategory.find(@website.tip_category_id).description %><% end %> website:</p>
+	<% if @website.present? %>
+      <blockquote>
+        <p><strong><%= @website.content %></strong></p>
+	  </blockquote>
+    <% else %>
+        <p>Please add..</p>
+    <% end %>
+  </li>
+</ul>
+
+
+

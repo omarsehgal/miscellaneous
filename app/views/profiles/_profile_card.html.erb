@@ -1,0 +1,150 @@
+<!-- BEGIN: Profile Card -->
+
+  <div class="profile-hero">
+    <div class="award-tag">
+      <span><%= @current_user_total_accepted_award_count %></span>
+      Awards
+    </div>
+    <div id="profile-photo">
+      <img src="<%= @profile.avatar.url %>" width="96" height="93" />
+      <% if @edit_mode and @user.id == current_user.id and @profile.full_profile_at.present? %>
+        <a id="upload-avatar" href="#"><span>change image</span></a>
+      <% end %>
+    </div>
+    <ul class="stats">
+      <li><strong><%= @like_count_in_past_90 %></strong> likes</li>
+      <li><strong><%= @visitor_count_in_past_90 %></strong> profile views</li>
+      <li><strong><%= @profile.connections_count %></strong> connections</li>
+      <li><strong><%= @profile.recommenders_count %></strong> recommendations</li>
+    </ul>
+    <h2 class="name">
+      <span>
+        <%= @user.full_name %>
+        <% unless @user.is_charter.nil? %>
+          <span class="preferred"></span>
+        <% end %>
+      </span>
+    </h2>
+
+    <div id="title">
+      <a class="edit">edit</a>
+      <ul class="industry">
+        <%= render :partial => 'profile_card_title' %>
+      </ul>
+    </div>
+    <% if @edit_mode %>
+      <%= form_for @profile, :html => { :class => "status-update", :id => "status_update" } do |f| %>
+        <%= f.text_area :status_update, :maxlength => 140, :value => @profile.status_update %>
+        <div id="chars-remain"></div>
+        <%= hidden_field_tag "profile_card", "status" %>
+      <% end %>
+    <% else %>
+      <% if @profile.status_update.present? %>
+        <% if !@profile.status_update.empty? %>
+          <p><%= @profile.status_update %></p>
+        <% end %>
+      <% end %>
+    <% end %>
+    <%# if @user.login.present? %>
+      <!-- <p><%# link_to "http://www.blinkup.com/#{@user.login}", "http://www.blinkup.com/#{@user.login}" %></p> -->
+    <%# end %>
+  </div>
+
+  <div class="profile-data">
+
+    <!-- suppress empty fields if viewing profile of another person -->
+    <% unless !@own_view and @profile.location.nil? %>
+      <% unless !@own_view and @profile.location.city.nil? %>
+        <div id="region" class="c1">
+          <%= render :partial => 'profiles/profile_card_region' %>
+        </div>
+      <% end %>
+    <% end %>
+
+    <!-- suppress empty fields if viewing profile of another person -->
+    <% unless !@own_view and @profile.location.nil? %>
+      <% unless !@own_view and @profile.location.zip_code.nil? %>
+        <div id="zipcode" class="c2 medium">
+          <%= render :partial => 'profiles/profile_card_zipcode' %>
+        </div>
+      <% end %>
+    <% end %>
+
+    <!-- suppress empty fields -->
+    <% if @profile.location.present? %>
+      <% if @profile.location.country.present? %>
+        <div id="country" class="c2 small">
+          <%= render :partial => 'profiles/profile_card_country' %>
+        </div>
+      <% end %>
+    <% end %>
+
+    <!-- suppress empty fields if viewing profile of another person -->
+    <% unless !@own_view and @profile.primary_industry.present? %>
+      <div id="industry" class="c1">
+        <%= render :partial => 'profiles/profile_card_industry' %>
+      </div>
+    <% end %>
+
+    <!-- suppress empty fields if viewing profile of another person -->
+    <% unless !@own_view and @profile.headline.nil? %>
+      <div id="headline" class="c2">
+        <%= render :partial => 'profiles/profile_card_headline' %>
+      </div>
+    <% end %>
+
+    <!-- suppress empty fields if viewing profile of another person -->
+    <% unless !@own_view and @profile.positions.default.nil? %>
+      <% unless !@own_view and @profile.positions.default.first.company_size.nil? %>
+        <div id="company_size" class="c1">
+          <%= render :partial => 'profiles/profile_card_company_size' %>
+        </div>
+      <% end %>
+    <% end %>
+
+    <!-- suppress empty fields if viewing profile of another person -->
+    <% unless !@own_view and @profile.positions.default.nil? %>
+      <% unless !@own_view and @profile.positions.default.first.job_level.nil? %>
+        <div id="career_level" class="c2">
+          <%= render :partial => 'profiles/profile_card_career_level' %>
+        </div>
+      <% end %>
+    <% end %>
+
+    <!-- suppress empty fields if viewing profile of another person -->
+    <% unless !@own_view and @user.email.nil? %>
+      <div id="email" class="c1">
+        <%= render :partial => 'profiles/profile_card_email' %>
+      </div>
+    <% end %>
+
+    <!-- suppress empty fields if viewing profile of another person -->
+    <% unless !@own_view and @user.login.nil? %>
+      <div id="public_profile" class="c2">
+        <%= render :partial => 'profiles/profile_card_public_profile' %>
+      </div>
+    <% end %>
+
+    <!-- suppress empty fields if viewing profile of another person -->
+    <% unless !@own_view and @profile.business_phone_contact_infos.empty? %>
+      <div id="business_phone" class="c1">
+        <%= render :partial => 'profiles/profile_card_business_phone' %>
+      </div>
+    <% end %>
+
+    <!-- suppress empty fields if viewing profile of another person -->
+    <% unless !@own_view and @profile.mobile_phone_contact_infos.empty? %>
+      <div id="mobile_phone" class="c2">
+        <%= render :partial => 'profiles/profile_card_mobile_phone' %>
+      </div>
+    <% end %>
+
+    <!-- suppress empty fields if viewing profile of another person -->
+    <% unless !@own_view and @profile.educations.default.nil? %>
+      <% unless @profile.educations.default.first.nil? %>
+        <div id="university" class="c1">
+          <%= render :partial => 'profiles/profile_card_university' %>
+        </div>
+      <% end %>
+    <% end %>
+  </div>

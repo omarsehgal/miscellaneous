@@ -1,0 +1,30 @@
+<!-- suppress empty fields if viewing profile of another person -->
+<% unless !@own_view and @profile.looking_for.empty? %>
+  <div id="looking_for" class="mlp-box about-me-tab">
+    <%= render :partial => 'profile_looking_for' %>
+  </div>
+<% end %>
+
+<!-- suppress empty fields if viewing profile of another person -->
+<% unless !@own_view and @profile.offering.empty? %>
+  <div id="offering_free" class="mlp-box about-me-tab">
+    <%= render :partial => 'profile_offering_free' %>
+  </div>
+<% end %>
+
+<!-- suppress empty fields if viewing profile of another person -->
+<% unless !@own_view and @profile.professional_interests.empty? %>
+  <div id="professional_interests" class="mlp-box about-me-tab">
+    <%= render :partial => 'profile_professional_interests' %>
+  </div>
+<% end %>
+
+<!-- suppress empty fields if viewing profile of another person -->
+<% unless !@own_view and @profile.personal_interests.empty? %>
+  <div id="personal_interests" class="mlp-box about-me-tab">
+    <%= render :partial => 'profile_personal_interests' %>
+  </div>
+<% end %>
+
+
+

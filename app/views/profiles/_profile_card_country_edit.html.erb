@@ -1,0 +1,8 @@
+<h3>Country</h3>
+<a class="save" href="">save</a>
+<%= form_for @profile do |f| %>
+  <%= fields_for :location do |location| %>
+    <%= location.collection_select(:country, Country.all, :id, :name, {:selected => @profile.location.country.id}, {:style => "width:120px"}) %>
+  <% end %>
+  <%= hidden_field_tag "profile_card", "country" %>
+<% end %>

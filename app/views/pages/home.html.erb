@@ -1,0 +1,57 @@
+<script type="text/javascript">
+
+$(document).ready(function() {
+
+    $('a.jt').cluetip({
+      local: true,
+      showTitle: false,
+      mouseOutClose: true,
+      cluetipClass: 'rounded',
+      positionBy: 'title',
+      dropShadow: false,
+      width: 'auto'
+    });
+
+});
+
+</script>
+
+<div class="spacer">
+  &nbsp;
+</div>
+
+<div class="float">
+
+        <div class="content-left">
+            <span class="heading-text">Welcome <%= get_first_name(session[:idsid]) %>..</span>  <br>
+            <p>
+            You've reached the home of the SKX DA Infrastructure Team (iTeam)<br>
+            Don't forget to check out <a href="/faq/index">DADesk</a>, a user-based self-help Q&A<br />
+            </p>
+
+            <div class="float">
+
+                <div class="list-left">
+                    <%= render :partial => 'links/display_top_links' %>
+                </div>
+
+                <div class="list-right">
+                    <%= render :partial => 'documents/display_top_docs'%>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="content-right">
+            <%= render :partial => 'announcements/display_recent' %>
+        </div>
+
+</div>
+
+<div class="spacer">
+  &nbsp;
+</div>
+
+
+
+

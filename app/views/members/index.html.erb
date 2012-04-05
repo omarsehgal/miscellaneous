@@ -1,0 +1,32 @@
+<script type="text/javascript">
+
+$(document).ready(function() {
+
+  $('#team_id').append($("<option/>", {
+    value: "all",
+    text: "All DA Teams"
+  }));
+
+});
+
+</script>
+
+<%= form_tag "/members", :id => "team_select_form", :method => 'get' do %>
+  Select team: <%= collection_select(:team, :id, @teams, :id, :name, options ={:selected => @default}, :class => "select") %>
+  <%= submit_tag "Show" %>
+<% end %><br />
+
+<% if @all.present? %>
+  <% @teams.each do |team| %>
+    <% unless team.members.empty? %>
+      <%= render :partial => 'display_team', :locals => {:all => team.members, :team_name => team.name} %><br />
+    <% end %>
+  <% end %>
+<% else %>
+  <%= render :partial => 'display_team', :locals => {:all => @members, :team_name => @team.name} %>
+<% end %>
+
+<br />
+<% if session[:admin].present? %>
+    <%= link_to 'New Member', new_member_path %>
+<% end %>

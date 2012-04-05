@@ -1,0 +1,66 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US" xml:lang="en-US">
+
+  <head>
+    <title>myLinkpower</title>
+
+    <link rel="stylesheet" type="text/css" href="/stylesheets/mlp-base.css" />
+    <!--[if IE]>
+    <link rel="stylesheet" type="text/css" href="stylesheets/mlp-ie.css" />
+    <![endif]-->
+
+    <script>
+
+    $(document).ready(function() {
+      $(".message.mlp-button").live("click", function() {
+        var to = $('#to').attr('value');
+        var sub = $('#sub').attr('value');
+        var body = $('#body').attr('value');
+        var user_id = $(this).parent().attr("user_id");
+
+        //alert(to + "," + sub + "," + body + "," + user_id);
+        bValid = true;
+
+        if(bValid) {
+          pageBlock();
+          $.post("/profiles/send_message?uid=" + user_id + "&subject=" + sub + "&body=" + body, function(){
+            pageUnblock();
+            alert("Your message has been sent");
+            $.colorbox.close()
+          });
+        }
+
+        return false;
+      });
+
+    });
+
+    </script>
+  </head>
+
+  <body id="awards">
+    <div class="overlay"></div>
+    <div class="message-box mlp-box">
+      <h2 class="grad1">Send a message</h2>
+      <div id="message-form" title="Send message to <%= @user.first_name %>" user_id="<%= @user.id %>">
+        <%= form_tag("/send_message", :id => "message-form") do %>
+          <p>
+            <%= label_tag(:to, "To:") %>
+            <%= text_field_tag("to", "#{@user.full_name}", :disabled => true) %>
+          </p>
+          <p>
+            <%= label_tag(:s, "Subject:") %>
+            <%= text_field_tag("sub") %>
+          </p>
+          <p>
+            <%= label_tag(:m, "Message:") %>
+            <%= text_area_tag("body", "", :rows => 4, :cols => 22) %>
+          </p>
+        <% end %>
+        <span class="message mlp-button"><%= submit_tag 'Send Message' %></span>
+      </div>
+    </div>
+
+  </body>
+
+</html>

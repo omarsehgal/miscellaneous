@@ -1,0 +1,8 @@
+<h3>Postal Code</h3>
+<a class="save" href="">save</a>
+<%= form_for @profile do |f| %>
+  <%= fields_for :location do |location| %>
+    <%= location.text_field :zip_code, :value => @profile.location.zip_code, :size => 5 %>
+  <% end %>
+  <%= hidden_field_tag "profile_card", "zipcode" %>
+<% end %>

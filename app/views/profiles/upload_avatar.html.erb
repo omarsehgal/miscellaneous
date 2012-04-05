@@ -1,0 +1,103 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US" xml:lang="en-US">
+
+  <head>
+    <title>myLinkpower</title>
+
+    <link rel="stylesheet" type="text/css" href="/stylesheets/mlp-base.css" />
+
+    <!--[if IE]>
+    <link rel="stylesheet" type="text/css" href="stylesheets/mlp-ie.css" />
+    <![endif]-->
+
+    <script>
+	
+	var imgScaling;
+	var fileTypes = ["bmp","gif","png","jpg","jpeg"];
+
+    $(document).ready(function() {
+      $("form#avatar input").change(function() {
+        $("form#avatar").submit();
+      });
+
+      $("#submit").click(function() {
+        $.post("/do_crop", $("img#avatar").imgAreaSelect({ instance: true }).getSelection());
+      });
+    });
+
+    function showAvatar() {
+      if (window.frames[0].document.getElementById("new_avatar") == null)
+        return;
+
+      var imageURL = window.frames[0].document.getElementById("new_avatar").src;
+      
+      $("img#avatar").attr("src", imageURL);
+      $("img#preview").attr("src", imageURL);
+      
+      $('img#avatar').css({
+        width: 'auto',
+        height: 300 + 'px'});		
+      
+      $('img#avatar').imgAreaSelect({ parent: "#colorbox",
+                                      x1: 10, y1: 10, x2: 85, y2: 85,
+                                      autoHide:false,
+                                      aspectRatio: '3:3',
+                                      handles: true,
+                                      persistent:true,
+                                      onSelectChange: preview});
+      preview(null, {width: 300, height: 300, x1: 0, y1: 0});
+    }
+
+    function preview(img, selection) {
+	    var scaleX = 150 / (selection.width || 1);
+      var scaleY = 150 / (selection.height || 1);
+
+      $('img#preview').css({
+	      position: 'relative',
+        width: Math.round(scaleX * (img.width || 1)) + 'px',
+        height: Math.round(scaleY * 300) + 'px',
+        marginLeft: '-' + Math.round(scaleX * selection.x1) + 'px',
+        marginTop: '-' + Math.round(scaleY * selection.y1) + 'px' });
+    }
+    </script>
+
+  </head>
+
+  <body id="awards">
+    <div class="overlay"></div>
+    <div class="photo-box mlp-box">
+      <h2 class="grad1">Upload a Photo</h2>
+
+      <!-- BEGIN: Column 1 -->
+      <div class="column1">
+        <p class="instructions">You can upload a JPG, GIF or PNG file. (File size limit is 4 MB)</p>
+        <div class="preview">
+          <img id="preview" src="" />
+        </div>
+        <p class="preview-blurb">Above is how your photo will appear on our site.</p>
+      </div>
+      <!-- END: Column 1 -->
+
+      <!-- BEGIN: Column 2 -->
+      <div class="column2">
+        <%= form_for @user, :as => :user, :url => "/profiles/upload", :html => { :multipart => true, :target => "post_to", :id => "avatar" } do |form| %>
+          <%= form.file_field :avatar %>
+        <% end %>
+        <img id="avatar" src="" class="" />
+        <p class="instructions">To make adjustments, you can drag around and resize the dashed area above. When finished, click the "Save Photo" button below.</p>
+        <fieldset class="controls">
+          <button class="cancel">Cancel</button>
+          <span id="submit" class="mlp-button submit"><input type="submit" value="Save Photo" /></span>
+        </fieldset>
+      </div>
+      <!-- END: Column 2 -->
+
+    </div>
+
+    <iframe onload="showAvatar();" style="display:none" name="post_to" id="post_to">
+    </iframe>
+
+  </body>
+
+</html>
